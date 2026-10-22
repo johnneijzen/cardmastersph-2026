@@ -2,31 +2,40 @@
 
 ## 1. Project Setup and Core Requirements
 
-- [ ] Review the existing application and document current functionality
-- [ ] Identify existing database tables, relationships, and business rules
-- [ ] Set up the latest stable Laravel version compatible with the server environment
-- [ ] Configure environment variables and database connection
-- [ ] Configure authentication and session management
-- [ ] Set up user roles and permissions
-- [ ] Configure application layout, navigation, and dashboard
-- [ ] Set up form validation and error handling
-- [ ] Set up logging and exception handling
-- [ ] Implement database migrations and seeders
-- [ ] Implement automated tests for critical business logic
-- [ ] Configure file uploads and exports
-- [ ] Review security, authorization, and data integrity
+- [x] Review the existing application and document current functionality — `LEGACY_SYSTEM_ANALYSIS.md`
+- [x] Identify existing database tables, relationships, and business rules — `LEGACY_SYSTEM_ANALYSIS.md`, `app/Enums/`
+- [x] Set up the latest stable Laravel version compatible with the server environment — Laravel 13.38 on PHP 8.5
+- [x] Configure environment variables and database connection — MariaDB, database sessions, cache and queue
+- [x] Configure authentication and session management — Fortify, database sessions, login throttling, administrator driven password reset
+- [x] Set up user roles and permissions — `spatie/laravel-permission`, roles `admin`/`manager`/`staff`
+- [x] Configure application layout, navigation, and dashboard — Flux sidebar, `App\Support\Navigation`, dashboard statistics
+- [x] Set up form validation and error handling — `App\Http\Requests\FormRequest`, `errors/403`, `errors/404`
+- [x] Set up logging and exception handling — exception policy in `bootstrap/app.php`, `spatie/laravel-activitylog`
+- [x] Implement database migrations and seeders — migrations run, reference data and roles seeded
+- [x] Implement automated tests for critical business logic — 67 tests (roles, audit trail, dashboard, auth, password reset)
+- [x] Configure file uploads and exports — `maatwebsite/excel` config, `SpreadsheetUpload` rule, `SpreadsheetExport`/`SpreadsheetImport` base classes
+- [x] Review security, authorization, and data integrity — findings in `LEGACY_SYSTEM_ANALYSIS.md` §4
+
+### 1.1 Open items
+
+- [ ] **Password reset** — the deployment cannot send mail, so the reset is performed by an
+      administrator under *Administration → User Accounts*. The account holder is then forced to
+      choose their own password at the next sign in. The e-mail based reset of Fortify is disabled.
+- [ ] **Backup restore test** — deferred by request. Backup creation and the health check are
+      verified, but no restore has been performed yet. A restore test in a safe non-production
+      environment is still required before the backups can be called usable.
 
 ## 2. Dashboard
 
-- [ ] Create dashboard page
-- [ ] Display relevant application statistics
-- [ ] Display job order summaries
-- [ ] Display client summaries
-- [ ] Display employee summaries
-- [ ] Display inventory summaries
-- [ ] Display cash receipt summaries
-- [ ] Display pending tasks and upcoming activities
-- [ ] Apply role-based visibility to dashboard information
+- [x] Create dashboard page — Livewire page component `pages::dashboard`
+- [x] Display relevant application statistics — `App\Services\DashboardService`
+- [x] Display job order summaries — total, open, by status, overdue, due soon, archived
+- [x] Display client summaries — total, new this month, clients with a balance
+- [x] Display employee summaries — total, artists, with an account, assigned to job orders
+- [x] Display inventory summaries — items and out of stock
+- [x] Display cash receipt summaries — received this month, receipts, outstanding balance
+- [x] Display pending tasks and upcoming activities — counts of the own tasks and the list of the job orders that are due
+- [x] Apply role-based visibility to dashboard information — every section is only calculated and shown when the role holds the matching permission
 
 ## 3. Clients
 
@@ -68,14 +77,14 @@
 
 ## 4. Employees
 
-- [ ] Create employees list
-- [ ] Add employee
-- [ ] View employee details
-- [ ] Edit employee
-- [ ] Delete employee with appropriate safeguards
-- [ ] Implement search, filtering, and pagination
-- [ ] Manage employee account status
-- [ ] Manage employee roles and permissions where applicable
+- [x] Create employees list — `rappasoft/laravel-livewire-tables`, server side search, filters and pagination
+- [x] Add employee — `pages::employees.create`, creates the address, the employee and optionally the account
+- [x] View employee details — `pages::employees.show`
+- [x] Edit employee — `pages::employees.edit`
+- [x] Delete employee with appropriate safeguards — refused while the employee is the artist in charge of a job order
+- [x] Implement search, filtering, and pagination — name, position, e-mail address, province and account status
+- [x] Manage employee account status — `users.is_active`, a deactivated account is refused at the login
+- [x] Manage employee roles and permissions where applicable — `employees.manage-accounts`, the role of the linked account is changed and written to the activity log
 
 ## 5. Inventory
 

@@ -2,6 +2,9 @@
 
 namespace App\Models;
 
+use App\Concerns\LogsActivity;
+use Database\Factories\PaymentOptionFactory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -11,6 +14,17 @@ use Illuminate\Database\Eloquent\Model;
  */
 class PaymentOption extends Model
 {
+    /** @use HasFactory<PaymentOptionFactory> */
+    use HasFactory, LogsActivity;
+
+    /**
+     * The log name the activity is recorded under.
+     */
+    protected function activityLogName(): string
+    {
+        return 'payment-option';
+    }
+
     /**
      * The database table used by the model.
      *
@@ -28,7 +42,7 @@ class PaymentOption extends Model
     /**
      * Attributes that should be mass-assignable.
      *
-     * @var array
+     * @var list<string>
      */
     protected $fillable = [
         'name', 'created_at', 'updated_at',
@@ -37,7 +51,7 @@ class PaymentOption extends Model
     /**
      * The attributes excluded from the model's JSON form.
      *
-     * @var array
+     * @var list<string>
      */
     protected $hidden = [
 
@@ -46,7 +60,7 @@ class PaymentOption extends Model
     /**
      * The attributes that should be casted to native types.
      *
-     * @var array
+     * @var array<string, string>
      */
     protected $casts = [
         'name' => 'string', 'created_at' => 'timestamp', 'updated_at' => 'timestamp',
@@ -55,7 +69,7 @@ class PaymentOption extends Model
     /**
      * The attributes that should be mutated to dates.
      *
-     * @var array
+     * @var list<string>
      */
     protected $dates = [
         'created_at', 'updated_at',

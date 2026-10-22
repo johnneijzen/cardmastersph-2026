@@ -1,5 +1,6 @@
 <?php
 
+use App\Support\SqlScript;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -17,7 +18,7 @@ class PopulateJobOrderAgents extends Migration
             //
         });
 
-        DB::unprepared(File::get(base_path().'/database/seeders/job_order_agents.sql'));
+        SqlScript::run(base_path('/database/seeders/job_order_agents.sql'));
     }
 
     /**

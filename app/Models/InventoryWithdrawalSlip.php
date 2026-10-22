@@ -29,7 +29,7 @@ class InventoryWithdrawalSlip extends Model
     /**
      * Attributes that should be mass-assignable.
      *
-     * @var array
+     * @var list<string>
      */
     protected $fillable = [
         'qty', 'particulars', 'inventory_id', 'withdrawal_slips_id', 'created_at', 'updated_at',
@@ -38,7 +38,7 @@ class InventoryWithdrawalSlip extends Model
     /**
      * The attributes excluded from the model's JSON form.
      *
-     * @var array
+     * @var list<string>
      */
     protected $hidden = [
 
@@ -47,7 +47,7 @@ class InventoryWithdrawalSlip extends Model
     /**
      * The attributes that should be casted to native types.
      *
-     * @var array
+     * @var array<string, string>
      */
     protected $casts = [
         'qty' => 'int', 'particulars' => 'string', 'created_at' => 'timestamp', 'updated_at' => 'timestamp',
@@ -56,7 +56,7 @@ class InventoryWithdrawalSlip extends Model
     /**
      * The attributes that should be mutated to dates.
      *
-     * @var array
+     * @var list<string>
      */
     protected $dates = [
         'created_at', 'updated_at',

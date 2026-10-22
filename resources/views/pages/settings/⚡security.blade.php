@@ -79,13 +79,26 @@ new #[Title('Security settings')] class extends Component {
             throw $e;
         }
 
-        Auth::user()->update([
+        $user = Auth::user();
+        $wasResetByAdministrator = $user->must_change_password;
+
+        $user->update([
             'password' => $validated['password'],
         ]);
+
+        if ($wasResetByAdministrator) {
+            // The account was reset by an administrator, the holder has now
+            // chosen their own password.
+            $user->forceFill(['must_change_password' => false])->saveQuietly();
+        }
 
         $this->reset('current_password', 'password', 'password_confirmation');
 
         Flux::toast(variant: 'success', text: __('Password updated.'));
+
+        if ($wasResetByAdministrator) {
+            $this->redirectIntended(default: route('dashboard', absolute: false));
+        }
     }
 
     /**
@@ -301,8 +314,6 @@ new #[Title('Security settings')] class extends Component {
                             </div>
                         @endforelse
                     </div>
-
-                    <x-passkey-registration />
                 </div>
             </section>
         @endif

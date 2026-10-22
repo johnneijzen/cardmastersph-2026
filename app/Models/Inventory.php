@@ -2,7 +2,12 @@
 
 namespace App\Models;
 
+use App\Concerns\LogsActivity;
+use Database\Factories\InventoryFactory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 /**
  * @property string $item_name
@@ -17,6 +22,17 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Inventory extends Model
 {
+    /** @use HasFactory<InventoryFactory> */
+    use HasFactory, LogsActivity;
+
+    /**
+     * The log name the activity is recorded under.
+     */
+    protected function activityLogName(): string
+    {
+        return 'inventory';
+    }
+
     /**
      * The database table used by the model.
      *
@@ -34,7 +50,7 @@ class Inventory extends Model
     /**
      * Attributes that should be mass-assignable.
      *
-     * @var array
+     * @var list<string>
      */
     protected $fillable = [
         'item_name', 'description', 'categories_id', 'subcategories_id', 'price', 'size', 'color', 'type', 'current_quantity', 'created_at', 'updated_at',
@@ -43,7 +59,7 @@ class Inventory extends Model
     /**
      * The attributes excluded from the model's JSON form.
      *
-     * @var array
+     * @var list<string>
      */
     protected $hidden = [
 
@@ -52,7 +68,7 @@ class Inventory extends Model
     /**
      * The attributes that should be casted to native types.
      *
-     * @var array
+     * @var array<string, string>
      */
     protected $casts = [
         'item_name' => 'string', 'description' => 'string', 'price' => 'string', 'size' => 'string', 'color' => 'string', 'type' => 'string', 'current_quantity' => 'string', 'created_at' => 'timestamp', 'updated_at' => 'timestamp',
@@ -61,7 +77,7 @@ class Inventory extends Model
     /**
      * The attributes that should be mutated to dates.
      *
-     * @var array
+     * @var list<string>
      */
     protected $dates = [
         'created_at', 'updated_at',
@@ -71,17 +87,29 @@ class Inventory extends Model
     // Functions ...
 
     // Relations ...
-    public function category()
+    /**
+     * @return BelongsTo<Category, $this>
+     * @return BelongsTo<Category, $this>
+     */
+    public function category(): BelongsTo
     {
-        return $this->belongsTo('App\Models\Category', 'categories_id');
+        return $this->belongsTo(Category::class, 'categories_id');
     }
 
-    public function subcategory()
+    /**
+     * @return BelongsTo<Subcategory, $this>
+     * @return BelongsTo<Subcategory, $this>
+     */
+    public function subcategory(): BelongsTo
     {
-        return $this->belongsTo('App\Models\Subcategory', 'subcategories_id');
+        return $this->belongsTo(Subcategory::class, 'subcategories_id');
     }
 
-    public function withdrawalSlip()
+    /**
+     * @return BelongsToMany<WithdrawalSlip, $this>
+     * @return BelongsToMany<WithdrawalSlip, $this>
+     */
+    public function withdrawalSlip(): BelongsToMany
     {
         return $this->belongsToMany(WithdrawalSlip::class, 'inventory_withdrawal_slips', 'inventory_id', 'withdrawal_slips_id')->withPivot('qty', 'particulars');
     }

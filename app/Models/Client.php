@@ -2,7 +2,12 @@
 
 namespace App\Models;
 
+use App\Concerns\LogsActivity;
+use Database\Factories\ClientFactory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * @property string $name
@@ -12,6 +17,17 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Client extends Model
 {
+    /** @use HasFactory<ClientFactory> */
+    use HasFactory, LogsActivity;
+
+    /**
+     * The log name the activity is recorded under.
+     */
+    protected function activityLogName(): string
+    {
+        return 'client';
+    }
+
     /**
      * The database table used by the model.
      *
@@ -29,7 +45,7 @@ class Client extends Model
     /**
      * Attributes that should be mass-assignable.
      *
-     * @var array
+     * @var list<string>
      */
     protected $fillable = [
         'name', 'client_number', 'address_id', 'created_at', 'updated_at', 'agent_id',
@@ -38,7 +54,7 @@ class Client extends Model
     /**
      * The attributes excluded from the model's JSON form.
      *
-     * @var array
+     * @var list<string>
      */
     protected $hidden = [
 
@@ -47,7 +63,7 @@ class Client extends Model
     /**
      * The attributes that should be casted to native types.
      *
-     * @var array
+     * @var array<string, string>
      */
     protected $casts = [
         'name' => 'string', 'client_number' => 'string', 'created_at' => 'timestamp', 'updated_at' => 'timestamp', 'agent' => 'string',
@@ -56,7 +72,7 @@ class Client extends Model
     /**
      * The attributes that should be mutated to dates.
      *
-     * @var array
+     * @var list<string>
      */
     protected $dates = [
         'created_at', 'updated_at',
@@ -66,23 +82,35 @@ class Client extends Model
     // Functions ...
 
     // Relations ...
-    public function address()
+    /**
+     * @return BelongsTo<Address, $this>
+     */
+    public function address(): BelongsTo
     {
-        return $this->belongsTo('App\Models\Address', 'address_id');
+        return $this->belongsTo(Address::class, 'address_id');
     }
 
-    public function orders()
+    /**
+     * @return HasMany<Order, $this>
+     */
+    public function orders(): HasMany
     {
-        return $this->hasMany('App\Models\Order');
+        return $this->hasMany(Order::class);
     }
 
-    public function client_agent()
+    /**
+     * @return BelongsTo<ClientAgent, $this>
+     */
+    public function client_agent(): BelongsTo
     {
-        return $this->belongsTo('App\Models\ClientAgent', 'agent_id');
+        return $this->belongsTo(ClientAgent::class, 'agent_id');
     }
 
-    public function clientContactPersons()
+    /**
+     * @return HasMany<ClientContactPerson, $this>
+     */
+    public function clientContactPersons(): HasMany
     {
-        return $this->hasMany('App\Models\ClientContactPerson');
+        return $this->hasMany(ClientContactPerson::class);
     }
 }

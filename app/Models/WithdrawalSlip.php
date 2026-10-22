@@ -2,15 +2,32 @@
 
 namespace App\Models;
 
+use App\Concerns\LogsActivity;
+use Database\Factories\WithdrawalSlipFactory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Support\Carbon;
 
 /**
- * @property Date $date
+ * @property Carbon $date
  * @property int $created_at
  * @property int $updated_at
  */
 class WithdrawalSlip extends Model
 {
+    /** @use HasFactory<WithdrawalSlipFactory> */
+    use HasFactory, LogsActivity;
+
+    /**
+     * The log name the activity is recorded under.
+     */
+    protected function activityLogName(): string
+    {
+        return 'withdrawal-slip';
+    }
+
     /**
      * The database table used by the model.
      *
@@ -28,7 +45,7 @@ class WithdrawalSlip extends Model
     /**
      * Attributes that should be mass-assignable.
      *
-     * @var array
+     * @var list<string>
      */
     protected $fillable = [
         'date', 'client_id', 'job_order_id', 'created_by', 'updated_by', 'created_at', 'updated_at',
@@ -37,7 +54,7 @@ class WithdrawalSlip extends Model
     /**
      * The attributes excluded from the model's JSON form.
      *
-     * @var array
+     * @var list<string>
      */
     protected $hidden = [
 
@@ -46,7 +63,7 @@ class WithdrawalSlip extends Model
     /**
      * The attributes that should be casted to native types.
      *
-     * @var array
+     * @var array<string, string>
      */
     protected $casts = [
         'date' => 'date', 'created_at' => 'timestamp', 'updated_at' => 'timestamp',
@@ -55,7 +72,7 @@ class WithdrawalSlip extends Model
     /**
      * The attributes that should be mutated to dates.
      *
-     * @var array
+     * @var list<string>
      */
     protected $dates = [
         'date', 'created_at', 'updated_at',
@@ -65,34 +82,50 @@ class WithdrawalSlip extends Model
 
     // Functions ...
     // Functions ...
-    public function getCreatedByNameAttribute()
+    public function getCreatedByNameAttribute(): ?string
     {
-        return User::where('id', $this->created_by)->pluck('name')->first();
+        return $this->createdBy?->name;
     }
 
-    public function getUpdatedByNameAttribute()
+    public function getUpdatedByNameAttribute(): ?string
     {
-        return User::where('id', $this->updated_by)->pluck('name')->first();
+        return $this->updatedBy?->name;
     }
 
     // Relations ...
-    public function client()
+    /**
+     * @return BelongsTo<Client, $this>
+     * @return BelongsTo<Client, $this>
+     */
+    public function client(): BelongsTo
     {
-        return $this->belongsTo('App\Models\Client', 'client_id');
+        return $this->belongsTo(Client::class, 'client_id');
     }
 
-    public function inventory()
+    /**
+     * @return BelongsToMany<Inventory, $this>
+     * @return BelongsToMany<Inventory, $this>
+     */
+    public function inventory(): BelongsToMany
     {
         return $this->belongsToMany(Inventory::class, 'inventory_withdrawal_slips', 'withdrawal_slips_id', 'inventory_id')->withPivot('qty', 'particulars');
     }
 
-    public function createdBy()
+    /**
+     * @return BelongsTo<User, $this>
+     * @return BelongsTo<User, $this>
+     */
+    public function createdBy(): BelongsTo
     {
-        return $this->belongsTo('App\Models\User', 'created_by');
+        return $this->belongsTo(User::class, 'created_by');
     }
 
-    public function updatedBy()
+    /**
+     * @return BelongsTo<User, $this>
+     * @return BelongsTo<User, $this>
+     */
+    public function updatedBy(): BelongsTo
     {
-        return $this->belongsTo('App\Models\User', 'updated_by');
+        return $this->belongsTo(User::class, 'updated_by');
     }
 }

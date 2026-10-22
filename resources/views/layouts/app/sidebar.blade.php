@@ -11,11 +11,20 @@
             </flux:sidebar.header>
 
             <flux:sidebar.nav>
-                <flux:sidebar.group :heading="__('Platform')" class="grid">
-                    <flux:sidebar.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>
-                        {{ __('Dashboard') }}
-                    </flux:sidebar.item>
-                </flux:sidebar.group>
+                @foreach (\App\Support\Navigation::visibleGroups(auth()->user()) as $group)
+                    <flux:sidebar.group :heading="__($group->heading)" class="grid">
+                        @foreach ($group->visibleItems(auth()->user()) as $item)
+                            <flux:sidebar.item
+                                :icon="$item->icon"
+                                :href="route($item->route)"
+                                :current="request()->routeIs($item->route.'*') || request()->routeIs($item->route)"
+                                wire:navigate
+                            >
+                                {{ __($item->label) }}
+                            </flux:sidebar.item>
+                        @endforeach
+                    </flux:sidebar.group>
+                @endforeach
             </flux:sidebar.nav>
 
             <flux:spacer />

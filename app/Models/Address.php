@@ -2,7 +2,12 @@
 
 namespace App\Models;
 
+use App\Concerns\LogsActivity;
+use Database\Factories\AddressFactory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
  * @property string $line_address
@@ -11,6 +16,17 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Address extends Model
 {
+    /** @use HasFactory<AddressFactory> */
+    use HasFactory, LogsActivity;
+
+    /**
+     * The log name the activity is recorded under.
+     */
+    protected function activityLogName(): string
+    {
+        return 'address';
+    }
+
     /**
      * The database table used by the model.
      *
@@ -28,7 +44,7 @@ class Address extends Model
     /**
      * Attributes that should be mass-assignable.
      *
-     * @var array
+     * @var list<string>
      */
     protected $fillable = [
         'line_address', 'city_id', 'created_at', 'updated_at',
@@ -37,7 +53,7 @@ class Address extends Model
     /**
      * The attributes excluded from the model's JSON form.
      *
-     * @var array
+     * @var list<string>
      */
     protected $hidden = [
 
@@ -46,7 +62,7 @@ class Address extends Model
     /**
      * The attributes that should be casted to native types.
      *
-     * @var array
+     * @var array<string, string>
      */
     protected $casts = [
         'line_address' => 'string', 'created_at' => 'timestamp', 'updated_at' => 'timestamp',
@@ -55,7 +71,7 @@ class Address extends Model
     /**
      * The attributes that should be mutated to dates.
      *
-     * @var array
+     * @var list<string>
      */
     protected $dates = [
         'created_at', 'updated_at',
@@ -65,13 +81,19 @@ class Address extends Model
     // Functions ...
 
     // Relations ...
-    public function client()
+    /**
+     * @return HasOne<Client, $this>
+     */
+    public function client(): HasOne
     {
-        return $this->hasOne('App\Models\Client');
+        return $this->hasOne(Client::class);
     }
 
-    public function city()
+    /**
+     * @return BelongsTo<City, $this>
+     */
+    public function city(): BelongsTo
     {
-        return $this->belongsTo('App\Models\City', 'city_id');
+        return $this->belongsTo(City::class, 'city_id');
     }
 }

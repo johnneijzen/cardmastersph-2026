@@ -162,7 +162,9 @@ return [
 
     'features' => [
         Features::registration(),
-        Features::resetPasswords(),
+        // Password resets are performed by an administrator because the
+        // deployment cannot send mail. See App\Actions\ResetUserPassword.
+        // Features::resetPasswords(),
         // Features::emailVerification(),
         // Features::twoFactorAuthentication([
         //     'confirm' => true,

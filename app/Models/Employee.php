@@ -2,14 +2,20 @@
 
 namespace App\Models;
 
+use App\Concerns\LogsActivity;
+use Database\Factories\EmployeeFactory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Carbon;
 
 /**
  * @property string $first_name
  * @property string $middle_name
  * @property string $last_name
  * @property string $position
- * @property Date $birthday
+ * @property Carbon $birthday
  * @property string $contact_number
  * @property int $created_at
  * @property int $updated_at
@@ -18,6 +24,17 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Employee extends Model
 {
+    /** @use HasFactory<EmployeeFactory> */
+    use HasFactory, LogsActivity;
+
+    /**
+     * The log name the activity is recorded under.
+     */
+    protected function activityLogName(): string
+    {
+        return 'employee';
+    }
+
     /**
      * The database table used by the model.
      *
@@ -35,7 +52,7 @@ class Employee extends Model
     /**
      * Attributes that should be mass-assignable.
      *
-     * @var array
+     * @var list<string>
      */
     protected $fillable = [
         'first_name', 'middle_name', 'last_name', 'position', 'birthday', 'contact_number', 'address_id', 'user_id', 'created_at', 'updated_at', 'emergency_contact_person_name', 'emergency_contact_person_number',
@@ -44,7 +61,7 @@ class Employee extends Model
     /**
      * The attributes excluded from the model's JSON form.
      *
-     * @var array
+     * @var list<string>
      */
     protected $hidden = [
 
@@ -53,7 +70,7 @@ class Employee extends Model
     /**
      * The attributes that should be casted to native types.
      *
-     * @var array
+     * @var array<string, string>
      */
     protected $casts = [
         'first_name' => 'string', 'middle_name' => 'string', 'last_name' => 'string', 'position' => 'string', 'birthday' => 'date', 'contact_number' => 'string', 'created_at' => 'timestamp', 'updated_at' => 'timestamp', 'emergency_contact_person_name' => 'string', 'emergency_contact_person_number' => 'string',
@@ -62,7 +79,7 @@ class Employee extends Model
     /**
      * The attributes that should be mutated to dates.
      *
-     * @var array
+     * @var list<string>
      */
     protected $dates = [
         'birthday', 'created_at', 'updated_at',
@@ -79,18 +96,27 @@ class Employee extends Model
     }
 
     // Relations ...
-    public function address()
+    /**
+     * @return BelongsTo<Address, $this>
+     */
+    public function address(): BelongsTo
     {
-        return $this->belongsTo('App\Models\Address', 'address_id');
+        return $this->belongsTo(Address::class, 'address_id');
     }
 
-    public function user()
+    /**
+     * @return BelongsTo<User, $this>
+     */
+    public function user(): BelongsTo
     {
-        return $this->belongsTo('App\Models\User', 'user_id');
+        return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function jobOrders()
+    /**
+     * @return HasMany<JobOrder, $this>
+     */
+    public function jobOrders(): HasMany
     {
-        return $this->hasMany('App\Models\JobOrder');
+        return $this->hasMany(JobOrder::class);
     }
 }

@@ -2,7 +2,9 @@
 
 namespace Database\Factories;
 
+use App\Enums\Role;
 use App\Models\User;
+use App\Services\RoleAssignmentService;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -56,5 +58,40 @@ class UserFactory extends Factory
             'two_factor_recovery_codes' => encrypt(json_encode(['recovery-code-1'])),
             'two_factor_confirmed_at' => now(),
         ]);
+    }
+
+    /**
+     * Give the user a role, creating the role and its permissions when they
+     * do not exist yet.
+     */
+    public function withRole(Role $role): static
+    {
+        return $this->afterCreating(function (User $user) use ($role): void {
+            app(RoleAssignmentService::class)->assign($user, $role);
+        });
+    }
+
+    /**
+     * Give the user the administrator role.
+     */
+    public function admin(): static
+    {
+        return $this->withRole(Role::Admin);
+    }
+
+    /**
+     * Give the user the manager role.
+     */
+    public function manager(): static
+    {
+        return $this->withRole(Role::Manager);
+    }
+
+    /**
+     * Give the user the staff role.
+     */
+    public function staff(): static
+    {
+        return $this->withRole(Role::Staff);
     }
 }

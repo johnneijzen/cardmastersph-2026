@@ -28,7 +28,7 @@ class OrdersProducts extends Model
     /**
      * Attributes that should be mass-assignable.
      *
-     * @var array
+     * @var list<string>
      */
     protected $fillable = [
         'oty', 'order_id', 'product_id', 'created_at', 'updated_at',
@@ -37,7 +37,7 @@ class OrdersProducts extends Model
     /**
      * The attributes excluded from the model's JSON form.
      *
-     * @var array
+     * @var list<string>
      */
     protected $hidden = [
 
@@ -46,7 +46,7 @@ class OrdersProducts extends Model
     /**
      * The attributes that should be casted to native types.
      *
-     * @var array
+     * @var array<string, string>
      */
     protected $casts = [
         'oty' => 'int', 'created_at' => 'timestamp', 'updated_at' => 'timestamp',
@@ -55,7 +55,7 @@ class OrdersProducts extends Model
     /**
      * The attributes that should be mutated to dates.
      *
-     * @var array
+     * @var list<string>
      */
     protected $dates = [
         'created_at', 'updated_at',

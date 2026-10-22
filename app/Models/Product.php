@@ -2,7 +2,12 @@
 
 namespace App\Models;
 
+use App\Concerns\LogsActivity;
+use Database\Factories\ProductFactory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 /**
  * @property string $name
@@ -13,6 +18,17 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Product extends Model
 {
+    /** @use HasFactory<ProductFactory> */
+    use HasFactory, LogsActivity;
+
+    /**
+     * The log name the activity is recorded under.
+     */
+    protected function activityLogName(): string
+    {
+        return 'product';
+    }
+
     /**
      * The database table used by the model.
      *
@@ -30,7 +46,7 @@ class Product extends Model
     /**
      * Attributes that should be mass-assignable.
      *
-     * @var array
+     * @var list<string>
      */
     protected $fillable = [
         'name', 'amount', 'created_at', 'updated_at', 'particulars', 'unit_price', 'class_id', 'subclass_id', 'unit',
@@ -39,7 +55,7 @@ class Product extends Model
     /**
      * The attributes excluded from the model's JSON form.
      *
-     * @var array
+     * @var list<string>
      */
     protected $hidden = [
 
@@ -48,7 +64,7 @@ class Product extends Model
     /**
      * The attributes that should be casted to native types.
      *
-     * @var array
+     * @var array<string, string>
      */
     protected $casts = [
         'name' => 'string', 'created_at' => 'timestamp', 'updated_at' => 'timestamp', 'particulars' => 'string', 'unit' => 'string',
@@ -57,25 +73,37 @@ class Product extends Model
     /**
      * The attributes that should be mutated to dates.
      *
-     * @var array
+     * @var list<string>
      */
     protected $dates = [
         'created_at', 'updated_at',
     ];
 
     // Relations ...
-    public function orders()
+    /**
+     * @return BelongsToMany<Order, $this>
+     * @return BelongsToMany<Order, $this>
+     */
+    public function orders(): BelongsToMany
     {
         return $this->belongsToMany(Order::class, 'orders_products', 'product_id', 'order_id')->withPivot('qty');
     }
 
-    public function product_class()
+    /**
+     * @return BelongsTo<ProductClass, $this>
+     * @return BelongsTo<ProductClass, $this>
+     */
+    public function product_class(): BelongsTo
     {
-        return $this->belongsTo('App\Models\ProductClass', 'class_id')->withTrashed();
+        return $this->belongsTo(ProductClass::class, 'class_id')->withTrashed();
     }
 
-    public function product_subclass()
+    /**
+     * @return BelongsTo<ProductSubclass, $this>
+     * @return BelongsTo<ProductSubclass, $this>
+     */
+    public function product_subclass(): BelongsTo
     {
-        return $this->belongsTo('App\Models\ProductSubclass', 'subclass_id')->withTrashed();
+        return $this->belongsTo(ProductSubclass::class, 'subclass_id')->withTrashed();
     }
 }

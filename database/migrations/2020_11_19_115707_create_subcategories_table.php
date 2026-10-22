@@ -1,5 +1,6 @@
 <?php
 
+use App\Support\SqlScript;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -19,7 +20,7 @@ class CreateSubcategoriesTable extends Migration
             $table->timestamps();
         });
 
-        DB::unprepared(File::get(base_path().'/database/seeders/subcategories.sql'));
+        SqlScript::run(base_path('/database/seeders/subcategories.sql'));
     }
 
     /**

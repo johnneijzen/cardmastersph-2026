@@ -2,7 +2,11 @@
 
 namespace App\Models;
 
+use App\Concerns\LogsActivity;
+use Database\Factories\ClientContactPersonFactory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property string $contact_person
@@ -13,6 +17,17 @@ use Illuminate\Database\Eloquent\Model;
  */
 class ClientContactPerson extends Model
 {
+    /** @use HasFactory<ClientContactPersonFactory> */
+    use HasFactory, LogsActivity;
+
+    /**
+     * The log name the activity is recorded under.
+     */
+    protected function activityLogName(): string
+    {
+        return 'client-contact-person';
+    }
+
     /**
      * The database table used by the model.
      *
@@ -30,7 +45,7 @@ class ClientContactPerson extends Model
     /**
      * Attributes that should be mass-assignable.
      *
-     * @var array
+     * @var list<string>
      */
     protected $fillable = [
         'contact_person', 'contact_number', 'client_id', 'created_at', 'updated_at', 'contact_email',
@@ -39,7 +54,7 @@ class ClientContactPerson extends Model
     /**
      * The attributes excluded from the model's JSON form.
      *
-     * @var array
+     * @var list<string>
      */
     protected $hidden = [
 
@@ -48,7 +63,7 @@ class ClientContactPerson extends Model
     /**
      * The attributes that should be casted to native types.
      *
-     * @var array
+     * @var array<string, string>
      */
     protected $casts = [
         'contact_person' => 'string', 'contact_number' => 'string', 'created_at' => 'timestamp', 'updated_at' => 'timestamp', 'contact_email' => 'string',
@@ -57,7 +72,7 @@ class ClientContactPerson extends Model
     /**
      * The attributes that should be mutated to dates.
      *
-     * @var array
+     * @var list<string>
      */
     protected $dates = [
         'created_at', 'updated_at',
@@ -67,8 +82,11 @@ class ClientContactPerson extends Model
     // Functions ...
 
     // Relations ...
-    public function client()
+    /**
+     * @return BelongsTo<Client, $this>
+     */
+    public function client(): BelongsTo
     {
-        return $this->belongsTo('App\Models\Client', 'client_id');
+        return $this->belongsTo(Client::class, 'client_id');
     }
 }

@@ -1,5 +1,6 @@
 <?php
 
+use App\Notifications\Channels\LogChannel;
 use Spatie\Backup\Notifications\Notifiable;
 use Spatie\Backup\Notifications\Notifications\BackupHasFailedNotification;
 use Spatie\Backup\Notifications\Notifications\BackupWasSuccessfulNotification;
@@ -38,7 +39,9 @@ return [
                 'exclude' => [
                     base_path('vendor'),
                     base_path('node_modules'),
+                    base_path('old_code/.git'),
                     storage_path('framework'),
+                    storage_path('logs'),
                 ],
 
                 /*
@@ -162,9 +165,12 @@ return [
 
             /*
              * The disk names on which the backups will be stored.
+             *
+             * Production should point this at a protected destination that is
+             * separate from the application server, for example an `s3` disk.
              */
             'disks' => [
-                'local',
+                env('BACKUP_DISK', 'local'),
             ],
 
             /*
@@ -221,12 +227,12 @@ return [
      */
     'notifications' => [
         'notifications' => [
-            BackupHasFailedNotification::class => ['mail'],
-            UnhealthyBackupWasFoundNotification::class => ['mail'],
-            CleanupHasFailedNotification::class => ['mail'],
-            BackupWasSuccessfulNotification::class => ['mail'],
-            HealthyBackupWasFoundNotification::class => ['mail'],
-            CleanupWasSuccessfulNotification::class => ['mail'],
+            BackupHasFailedNotification::class => [LogChannel::class],
+            UnhealthyBackupWasFoundNotification::class => [LogChannel::class],
+            CleanupHasFailedNotification::class => [LogChannel::class],
+            BackupWasSuccessfulNotification::class => [LogChannel::class],
+            HealthyBackupWasFoundNotification::class => [LogChannel::class],
+            CleanupWasSuccessfulNotification::class => [LogChannel::class],
         ],
 
         /*
@@ -297,7 +303,7 @@ return [
     'monitor_backups' => [
         [
             'name' => env('APP_NAME', 'laravel-backup'),
-            'disks' => ['local'],
+            'disks' => [env('BACKUP_DISK', 'local')],
             'health_checks' => [
                 MaximumAgeInDays::class => 1,
                 MaximumStorageInMegabytes::class => 5000,

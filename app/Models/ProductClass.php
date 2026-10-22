@@ -2,7 +2,11 @@
 
 namespace App\Models;
 
+use App\Concerns\LogsActivity;
+use Database\Factories\ProductClassFactory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
@@ -12,7 +16,16 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  */
 class ProductClass extends Model
 {
-    use SoftDeletes;
+    /** @use HasFactory<ProductClassFactory> */
+    use HasFactory, LogsActivity, SoftDeletes;
+
+    /**
+     * The log name the activity is recorded under.
+     */
+    protected function activityLogName(): string
+    {
+        return 'product-class';
+    }
 
     /**
      * The database table used by the model.
@@ -31,7 +44,7 @@ class ProductClass extends Model
     /**
      * Attributes that should be mass-assignable.
      *
-     * @var array
+     * @var list<string>
      */
     protected $fillable = [
         'name', 'created_at', 'updated_at',
@@ -40,7 +53,7 @@ class ProductClass extends Model
     /**
      * The attributes excluded from the model's JSON form.
      *
-     * @var array
+     * @var list<string>
      */
     protected $hidden = [
 
@@ -49,7 +62,7 @@ class ProductClass extends Model
     /**
      * The attributes that should be casted to native types.
      *
-     * @var array
+     * @var array<string, string>
      */
     protected $casts = [
         'name' => 'string', 'created_at' => 'timestamp', 'updated_at' => 'timestamp',
@@ -58,7 +71,7 @@ class ProductClass extends Model
     /**
      * The attributes that should be mutated to dates.
      *
-     * @var array
+     * @var list<string>
      */
     protected $dates = [
         'created_at', 'updated_at',
@@ -68,8 +81,11 @@ class ProductClass extends Model
     // Functions ...
 
     // Relations ...
-    public function products()
+    /**
+     * @return HasMany<Product, $this>
+     */
+    public function products(): HasMany
     {
-        return $this->hasMany('App\Models\Product');
+        return $this->hasMany(Product::class);
     }
 }
