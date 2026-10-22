@@ -89,32 +89,32 @@
 
 ## 5. Inventory
 
-- [ ] Create inventory list
-- [ ] Add inventory item
-- [ ] View inventory item details
-- [ ] Edit inventory item
-- [ ] Delete inventory item with appropriate safeguards
-- [ ] Implement search, filtering, and pagination
-- [ ] Track inventory quantities
-- [ ] Validate stock movements
-- [ ] Preserve inventory transaction history
+- [x] Create inventory list — `rappasoft/laravel-livewire-tables`, server side search, filters and pagination
+- [x] Add inventory item — `pages::inventory.create`, records the opening quantity as a stock movement
+- [x] View inventory item details — `pages::inventory.show`, shows the classification, stock and stock history
+- [x] Edit inventory item — `pages::inventory.edit`, the quantity is only changed through an adjustment
+- [x] Delete inventory item with appropriate safeguards — archived (soft delete); refused while a withdrawal slip names the item
+- [x] Implement search, filtering, and pagination — name and category, filtered by category, subcategory, stock and type
+- [x] Track inventory quantities — `inventory_movements` keeps the quantity before, the change and the quantity after
+- [x] Validate stock movements — `App\Rules\InventoryRules`, a reason is required and the quantity may not go below zero
+- [x] Preserve inventory transaction history — the stock movements and the withdrawal history survive archiving
 
 ### 5.1 View Categories
 
-- [ ] Display inventory categories
-- [ ] Add category
-- [ ] Edit category
-- [ ] Delete category
-- [ ] Prevent deletion when dependent records exist
+- [x] Display inventory categories — table with the number of subcategories and inventory items per category
+- [x] Add category — `pages::categories.create`, the name of an active category has to be unique
+- [x] Edit category — `pages::categories.edit`
+- [x] Delete category — archived (soft delete), so the activity trail is kept
+- [x] Prevent deletion when dependent records exist — `App\Services\CategoryService`, refused while subcategories or inventory items still use the category, including archived records
 
 ### 5.2 View Subcategories
 
-- [ ] Display inventory subcategories
-- [ ] Add subcategory
-- [ ] Edit subcategory
-- [ ] Delete subcategory
-- [ ] Associate each subcategory with the correct category
-- [ ] Validate category and subcategory relationships
+- [x] Display inventory subcategories — table with the category and the number of inventory items per subcategory
+- [x] Add subcategory — `pages::subcategories.create`, assigned to a category
+- [x] Edit subcategory — `pages::subcategories.edit`, the subcategory can be moved to another category
+- [x] Delete subcategory — archived (soft delete); refused while inventory items still use the subcategory, including archived items
+- [x] Associate each subcategory with the correct category — `subcategories.categories_id`; the legacy subcategories stay unclassified until they are assigned
+- [x] Validate category and subcategory relationships — `App\Rules\SubcategoryRules` and `App\Rules\InventoryRules`, a name is unique inside its category and an item cannot use the subcategory of another category
 
 ### 5.3 Withdraw Slip
 
