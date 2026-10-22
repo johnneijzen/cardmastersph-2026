@@ -5,6 +5,7 @@
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../vendor/livewire/flux-pro/stubs/**/*.blade.php';
 @source '../../vendor/livewire/flux/stubs/**/*.blade.php';
+@source '../../vendor/rappasoft/laravel-livewire-tables/resources/views';
 
 @custom-variant dark (&:where(.dark, .dark *));
 
@@ -22,6 +23,20 @@
     --color-zinc-800: #262626;
     --color-zinc-900: #171717;
     --color-zinc-950: #0a0a0a;
+
+    /* Rappasoft renders its tables with the gray palette. Alias it to the zinc
+       scale above so the tables match the Flux/zinc shell in light and dark mode. */
+    --color-gray-50: var(--color-zinc-50);
+    --color-gray-100: var(--color-zinc-100);
+    --color-gray-200: var(--color-zinc-200);
+    --color-gray-300: var(--color-zinc-300);
+    --color-gray-400: var(--color-zinc-400);
+    --color-gray-500: var(--color-zinc-500);
+    --color-gray-600: var(--color-zinc-600);
+    --color-gray-700: var(--color-zinc-700);
+    --color-gray-800: var(--color-zinc-800);
+    --color-gray-900: var(--color-zinc-900);
+    --color-gray-950: var(--color-zinc-950);
 
     --color-accent: var(--color-neutral-800);
     --color-accent-content: var(--color-neutral-800);
@@ -44,6 +59,10 @@
     ::backdrop,
     ::file-selector-button {
         border-color: var(--color-gray-200, currentColor);
+    }
+
+    [x-cloak] {
+        display: none !important;
     }
 }
 
