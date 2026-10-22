@@ -86,6 +86,16 @@ class Category extends Model
      */
     public function inventory(): HasMany
     {
-        return $this->hasMany(Inventory::class);
+        return $this->hasMany(Inventory::class, 'categories_id');
+    }
+
+    /**
+     * The subcategories that belong to the category.
+     *
+     * @return HasMany<Subcategory, $this>
+     */
+    public function subcategories(): HasMany
+    {
+        return $this->hasMany(Subcategory::class, 'categories_id');
     }
 }

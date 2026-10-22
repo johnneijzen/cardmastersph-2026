@@ -1,11 +1,15 @@
 <?php
 
 use App\Models\CashReceipt;
+use App\Models\Category;
 use App\Models\Client;
 use App\Models\Employee;
 use App\Models\Inventory;
+use App\Models\InventoryMovement;
 use App\Models\JobOrder;
+use App\Models\Subcategory;
 use App\Models\User;
+use App\Services\InventoryService;
 use Spatie\Activitylog\Models\Activity;
 
 test('creating a business record is written to the activity log', function () {
@@ -115,6 +119,34 @@ test('every business model records its activity under its own log name', functio
     [Client::class, 'client'],
     [Employee::class, 'employee'],
     [Inventory::class, 'inventory'],
+    [Category::class, 'category'],
+    [Subcategory::class, 'subcategory'],
+    [InventoryMovement::class, 'inventory-movement'],
     [JobOrder::class, 'job-order'],
     [CashReceipt::class, 'cash-receipt'],
 ]);
+
+test('a stock adjustment is written to the activity log with the user that recorded it', function () {
+    $manager = User::factory()->manager()->create();
+    $inventory = Inventory::factory()->create(['current_quantity' => '5']);
+
+    $this->actingAs($manager);
+
+    app(InventoryService::class)->adjustQuantity($inventory, 3, 'Counted on the shelf');
+
+    $change = Activity::query()
+        ->where('subject_type', $inventory->getMorphClass())
+        ->where('subject_id', $inventory->getKey())
+        ->where('event', 'updated')
+        ->firstOrFail();
+
+    $movement = Activity::query()
+        ->where('log_name', 'inventory-movement')
+        ->where('event', 'created')
+        ->latest('id')
+        ->firstOrFail();
+
+    expect($change->causer_id)->toBe($manager->getKey())
+        ->and($change->attribute_changes['attributes']['current_quantity'] ?? null)->toBe('3')
+        ->and($movement->causer_id)->toBe($manager->getKey());
+});

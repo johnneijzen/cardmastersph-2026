@@ -6,11 +6,13 @@ use App\Concerns\LogsActivity;
 use Database\Factories\SubcategoryFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * @property string $name
+ * @property int|null $categories_id
  * @property int $created_at
  * @property int $updated_at
  */
@@ -47,7 +49,7 @@ class Subcategory extends Model
      * @var list<string>
      */
     protected $fillable = [
-        'name', 'created_at', 'updated_at',
+        'name', 'categories_id', 'created_at', 'updated_at',
     ];
 
     /**
@@ -65,7 +67,7 @@ class Subcategory extends Model
      * @var array<string, string>
      */
     protected $casts = [
-        'name' => 'string', 'created_at' => 'timestamp', 'updated_at' => 'timestamp',
+        'name' => 'string', 'categories_id' => 'integer', 'created_at' => 'timestamp', 'updated_at' => 'timestamp',
     ];
 
     /**
@@ -83,10 +85,20 @@ class Subcategory extends Model
 
     // Relations ...
     /**
+     * The category the subcategory belongs to.
+     *
+     * @return BelongsTo<Category, $this>
+     */
+    public function category(): BelongsTo
+    {
+        return $this->belongsTo(Category::class, 'categories_id');
+    }
+
+    /**
      * @return HasMany<Inventory, $this>
      */
     public function inventory(): HasMany
     {
-        return $this->hasMany(Inventory::class);
+        return $this->hasMany(Inventory::class, 'subcategories_id');
     }
 }

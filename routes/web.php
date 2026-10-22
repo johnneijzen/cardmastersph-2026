@@ -12,6 +12,19 @@ Route::middleware(['auth', 'password.changed'])->group(function () {
     Route::livewire('employees/{employee}', 'pages::employees.show')->name('employees.show');
     Route::livewire('employees/{employee}/edit', 'pages::employees.edit')->name('employees.edit');
 
+    Route::livewire('inventory', 'inventory.inventory-table')->name('inventory.index');
+    Route::livewire('inventory/create', 'pages::inventory.create')->name('inventory.create');
+    Route::livewire('inventory/{inventory}', 'pages::inventory.show')->name('inventory.show');
+    Route::livewire('inventory/{inventory}/edit', 'pages::inventory.edit')->name('inventory.edit');
+
+    Route::livewire('categories', 'categories.categories-table')->name('categories.index');
+    Route::livewire('categories/create', 'pages::categories.create')->name('categories.create');
+    Route::livewire('categories/{category}/edit', 'pages::categories.edit')->name('categories.edit');
+
+    Route::livewire('subcategories', 'subcategories.subcategories-table')->name('subcategories.index');
+    Route::livewire('subcategories/create', 'pages::subcategories.create')->name('subcategories.create');
+    Route::livewire('subcategories/{subcategory}/edit', 'pages::subcategories.edit')->name('subcategories.edit');
+
     Route::livewire('clients', 'clients.clients-table')->name('clients.index');
     Route::livewire('clients/create', 'pages::clients.create')->name('clients.create');
     Route::livewire('clients/{client}', 'pages::clients.show')->name('clients.show')->withTrashed();
