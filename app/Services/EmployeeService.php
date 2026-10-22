@@ -129,7 +129,7 @@ class EmployeeService
 
             $employee->delete();
 
-            if ($address !== null && ! Client::where('address_id', $address->getKey())->exists()) {
+            if ($address !== null && ! Client::withTrashed()->where('address_id', $address->getKey())->exists()) {
                 $address->delete();
             }
 

@@ -87,6 +87,8 @@ class ClientContactPerson extends Model
      */
     public function client(): BelongsTo
     {
-        return $this->belongsTo(Client::class, 'client_id');
+        // An archived client still owns its contract persons, so the contract
+        // person keeps showing the name of the client it belongs to.
+        return $this->belongsTo(Client::class, 'client_id')->withTrashed();
     }
 }

@@ -15,7 +15,16 @@ enum Permission: string
     case ViewClients = 'clients.view';
     case CreateClients = 'clients.create';
     case UpdateClients = 'clients.update';
+
+    /**
+     * Allows a client to be removed from the active list.
+     *
+     * A client is archived and never deleted, so the job orders, the cash
+     * receipts and the withdrawal slips that point at it keep their history.
+     */
     case DeleteClients = 'clients.delete';
+
+    case RestoreClients = 'clients.restore';
     case ExportClients = 'clients.export';
 
     // Client contract persons
@@ -170,6 +179,7 @@ enum Permission: string
         return [
             ...self::staffDefaults(),
             self::DeleteClients,
+            self::RestoreClients,
             self::ExportClients,
             self::DeleteClientContactPersons,
             self::CreateClientAgents,

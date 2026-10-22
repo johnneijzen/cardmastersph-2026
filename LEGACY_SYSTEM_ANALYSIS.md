@@ -294,4 +294,6 @@ These do not exist in the legacy application at all:
 | `acaronlex/laravel-calendar` | job order due-date timeline, rebuilt on the new table standard |
 | `orders.status` free text | `App\Enums\JobOrderStatus` |
 | `orders.payment_status` free text | `App\Enums\PaymentStatus`, always derived |
+| hard deleted client | archived client (`clients.deleted_at`); a client is never deleted, so the job orders, the cash receipts and the withdrawal slips keep their history and their link to the client |
+| `ClientExport` with inner joined contract persons | `App\Exports\ClientExport`, one row per contract person; a client without a contract person is exported with empty contract person columns |
 | self service password reset by mail | administrator driven reset under *Administration → User Accounts*, with a forced password change at the next sign in (the deployment cannot send mail) |

@@ -96,7 +96,9 @@ class CashReceipt extends Model
      */
     public function client(): BelongsTo
     {
-        return $this->belongsTo(Client::class, 'client_id');
+        // An archived client still belongs to the receipt, so the receipt
+        // keeps showing the name of the client it was paid for.
+        return $this->belongsTo(Client::class, 'client_id')->withTrashed();
     }
 
     /**

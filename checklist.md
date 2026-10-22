@@ -39,41 +39,42 @@
 
 ## 3. Clients
 
-- [ ] Create clients list
-- [ ] Create client
-- [ ] View client details
-- [ ] Edit client
-- [ ] Delete client with appropriate safeguards
-- [ ] Implement search, filtering, and pagination
-- [ ] Validate client information
-- [ ] Preserve existing client relationships
+- [x] Create clients list — `rappasoft/laravel-livewire-tables`, server side search, filters and pagination
+- [x] Create client — `pages::clients.create`, creates the address and the client
+- [x] View client details — `pages::clients.show`, shows the address, the agent, the contract persons and the job orders
+- [x] Edit client — `pages::clients.edit`
+- [x] Delete client with appropriate safeguards — a client is archived, never deleted, so the job orders, the cash receipts and the withdrawal slips keep their history
+- [x] Implement search, filtering, and pagination — name, phone number, address, city and agent, filtered by status, agent, province and city
+- [x] Validate client information — `App\Rules\ClientRules`, the name stays unique, also when the client is archived, and the city has to belong to the province
+- [x] Preserve existing client relationships — the orders, the cash receipts, the withdrawal slips and the contract persons keep their link to an archived client
 
 ### 3.1 Contract Person List
 
-- [ ] Display contract persons
-- [ ] Add contract person
-- [ ] View contract person details
-- [ ] Edit contract person
-- [ ] Delete contract person
-- [ ] Associate contract persons with the correct clients
-- [ ] Implement search and filtering
+- [x] Display contract persons — `rappasoft/laravel-livewire-tables`, server side search, filters and pagination
+- [x] Add contract person — `pages::client-contact-persons.create`
+- [x] View contract person details — `pages::client-contact-persons.show`
+- [x] Edit contract person — `pages::client-contact-persons.edit`
+- [x] Delete contract person — refused while a job order names the contract person
+- [x] Associate contract persons with the correct clients — the client has to be an active client
+- [x] Implement search and filtering — name, phone number, e-mail address, filtered by agent and province
 
 ### 3.2 Agent List
 
-- [ ] Display agents associated with clients
-- [ ] Add agent
-- [ ] Edit agent
-- [ ] Delete agent
-- [ ] Validate agent information and relationships
-- [ ] Implement search and filtering
+- [x] Display agents associated with clients — `rappasoft/laravel-livewire-tables` with the number of clients per agent
+- [x] Add agent — `pages::client-agents.create`
+- [x] Edit agent — `pages::client-agents.edit`
+- [x] Delete agent — refused while a client still points at the agent
+- [x] Validate agent information and relationships — the name of an agent has to be unique
+- [x] Implement search and filtering — server side search on the name of the agent
 
 ### 3.3 Client Export
 
-- [ ] Export client records
-- [ ] Support the required export format
-- [ ] Apply active filters to exported records where appropriate
-- [ ] Verify exported data and column headings
-- [ ] Enforce export permissions
+- [x] Export client records — `App\Exports\ClientExport`, one row per contract person
+- [x] Support the required export format — `.xlsx` through `maatwebsite/excel`
+- [x] Apply active filters to exported records where appropriate — the export holds the clients of the current search and filters
+- [x] Verify exported data and column headings — the export is read back in the tests
+- [x] Enforce export permissions — `clients.export`, the export is refused without the permission
+- [x] Protect the export against spreadsheet formula injection — `App\Exports\Concerns\PreventsFormulaInjection`
 
 ## 4. Employees
 

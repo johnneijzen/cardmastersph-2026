@@ -106,7 +106,9 @@ class Order extends Model
      */
     public function client(): BelongsTo
     {
-        return $this->belongsTo(Client::class, 'client_id');
+        // An archived client still belongs to the order, so the order keeps
+        // showing the name of the client it was placed for.
+        return $this->belongsTo(Client::class, 'client_id')->withTrashed();
     }
 
     /**

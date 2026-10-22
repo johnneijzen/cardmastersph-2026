@@ -86,7 +86,9 @@ class Address extends Model
      */
     public function client(): HasOne
     {
-        return $this->hasOne(Client::class);
+        // An archived client still owns its address, so the address keeps
+        // showing the client it belongs to.
+        return $this->hasOne(Client::class)->withTrashed();
     }
 
     /**

@@ -25,4 +25,24 @@ class ClientFactory extends Factory
             'agent_id' => ClientAgent::factory(),
         ];
     }
+
+    /**
+     * Indicate that the client is archived.
+     */
+    public function archived(): static
+    {
+        return $this->state(fn (array $attributes): array => [
+            'deleted_at' => now(),
+        ]);
+    }
+
+    /**
+     * Indicate that the client has no agent.
+     */
+    public function withoutAgent(): static
+    {
+        return $this->state(fn (array $attributes): array => [
+            'agent_id' => null,
+        ]);
+    }
 }

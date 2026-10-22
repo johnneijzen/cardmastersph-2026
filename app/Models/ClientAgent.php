@@ -6,7 +6,7 @@ use App\Concerns\LogsActivity;
 use Database\Factories\ClientAgentFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * @property string $name
@@ -82,10 +82,12 @@ class ClientAgent extends Model
 
     // Relations ...
     /**
-     * @return HasOne<Client, $this>
+     * The clients that were acquired through this agent.
+     *
+     * @return HasMany<Client, $this>
      */
-    public function client(): HasOne
+    public function clients(): HasMany
     {
-        return $this->hasOne(Client::class);
+        return $this->hasMany(Client::class, 'agent_id');
     }
 }
