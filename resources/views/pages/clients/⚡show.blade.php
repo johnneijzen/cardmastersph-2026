@@ -9,7 +9,8 @@ use Livewire\Attributes\Locked;
 use Livewire\Attributes\Title;
 use Livewire\Component;
 
-new #[Title('Client')] class extends Component {
+new #[Title('Client')] class extends Component
+{
     #[Locked]
     public Client $client;
 
@@ -72,9 +73,7 @@ new #[Title('Client')] class extends Component {
                 @endcan
             @endif
 
-            <flux:button :href="route('clients.index')" variant="ghost">
-                {{ __('Back to the list') }}
-            </flux:button>
+            <flux:button :href="route('clients.index')" variant="ghost"> {{ __('Back to the list') }} </flux:button>
         </div>
     </header>
 
@@ -97,7 +96,9 @@ new #[Title('Client')] class extends Component {
                 </div>
                 <div class="flex items-center justify-between gap-4">
                     <dt class="text-zinc-600 dark:text-zinc-400">{{ __('Added on') }}</dt>
-                    <dd class="font-medium">{{ $client->created_at ? date('d M Y', (int) $client->created_at) : '—' }}</dd>
+                    <dd class="font-medium">
+                        {{ $client->created_at ? date('d M Y', (int) $client->created_at) : '—' }}
+                    </dd>
                 </div>
             </dl>
         </flux:card>
@@ -133,7 +134,9 @@ new #[Title('Client')] class extends Component {
                     <li class="flex flex-wrap items-center justify-between gap-4 py-3">
                         <div>
                             <p class="font-medium">{{ $contactPerson->contact_person }}</p>
-                            <p class="text-sm text-zinc-500">{{ $contactPerson->contact_number }} · {{ $contactPerson->contact_email }}</p>
+                            <p class="text-sm text-zinc-500">
+                                {{ $contactPerson->contact_number }} · {{ $contactPerson->contact_email }}
+                            </p>
                         </div>
 
                         @can('update', $contactPerson)
@@ -152,7 +155,11 @@ new #[Title('Client')] class extends Component {
 
         @can('create', App\Models\ClientContactPerson::class)
             <div class="mt-4">
-                <flux:button :href="route('client-contact-persons.create', ['client' => $client->id])" variant="ghost" icon="plus">
+                <flux:button
+                    :href="route('client-contact-persons.create', ['client' => $client->id])"
+                    variant="ghost"
+                    icon="plus"
+                >
                     {{ __('Add contract person') }}
                 </flux:button>
             </div>

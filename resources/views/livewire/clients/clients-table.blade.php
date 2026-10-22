@@ -45,6 +45,7 @@
                 <flux:button variant="danger" wire:click="archiveClient" wire:loading.attr="disabled">
                     {{ __('Archive') }}
                 </flux:button>
-            </div>        </div>
+            </div>
+        </div>
     </flux:modal>
 </div>

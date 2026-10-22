@@ -11,7 +11,8 @@ use Livewire\Attributes\Locked;
 use Livewire\Attributes\Title;
 use Livewire\Component;
 
-new #[Title('Employee')] class extends Component {
+new #[Title('Employee')] class extends Component
+{
     #[Locked]
     public Employee $employee;
 
@@ -114,9 +115,7 @@ new #[Title('Employee')] class extends Component {
                 </flux:button>
             @endcan
 
-            <flux:button :href="route('employees.index')" variant="ghost">
-                {{ __('Back to the list') }}
-            </flux:button>
+            <flux:button :href="route('employees.index')" variant="ghost"> {{ __('Back to the list') }} </flux:button>
         </div>
     </header>
 

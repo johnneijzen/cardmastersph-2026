@@ -9,7 +9,8 @@ use Livewire\Attributes\Url;
 use Livewire\Component;
 use Livewire\WithPagination;
 
-new #[Title('User accounts')] class extends Component {
+new #[Title('User accounts')] class extends Component
+{
     use WithPagination;
 
     #[Url(as: 'search', except: '')]
@@ -99,7 +100,7 @@ new #[Title('User accounts')] class extends Component {
 
     <div class="overflow-x-auto rounded-xl border border-zinc-200 dark:border-zinc-700">
         <table class="w-full text-left text-sm">
-            <thead class="bg-zinc-50 text-xs uppercase tracking-wide text-zinc-500 dark:bg-zinc-900">
+            <thead class="bg-zinc-50 text-xs tracking-wide text-zinc-500 uppercase dark:bg-zinc-900">
                 <tr>
                     <th class="px-4 py-3">{{ __('Name') }}</th>
                     <th class="px-4 py-3">{{ __('E-mail address') }}</th>
@@ -114,12 +115,8 @@ new #[Title('User accounts')] class extends Component {
                     <tr wire:key="user-{{ $user->id }}">
                         <td class="px-4 py-3 font-medium">{{ $user->name }}</td>
                         <td class="px-4 py-3">{{ $user->email }}</td>
-                        <td class="px-4 py-3">
-                            {{ $user->getRoleNames()->implode(', ') ?: __('—') }}
-                        </td>
-                        <td class="px-4 py-3">
-                            {{ $user->employee?->getFullNameAttribute() ?? __('—') }}
-                        </td>
+                        <td class="px-4 py-3">{{ $user->getRoleNames()->implode(', ') ?: __('—') }}</td>
+                        <td class="px-4 py-3">{{ $user->employee?->getFullNameAttribute() ?? __('—') }}</td>
                         <td class="px-4 py-3">
                             @if ($user->must_change_password)
                                 <flux:badge color="amber" size="sm">{{ __('Password change required') }}</flux:badge>

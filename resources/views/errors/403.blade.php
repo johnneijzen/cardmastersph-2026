@@ -9,13 +9,9 @@
         </flux:text>
 
         @auth
-            <flux:button :href="route('dashboard')" variant="primary">
-                {{ __('Back to the dashboard') }}
-            </flux:button>
+            <flux:button :href="route('dashboard')" variant="primary"> {{ __('Back to the dashboard') }} </flux:button>
         @else
-            <flux:button :href="route('login')" variant="primary">
-                {{ __('Log in') }}
-            </flux:button>
+            <flux:button :href="route('login')" variant="primary"> {{ __('Log in') }} </flux:button>
         @endauth
     </div>
 </x-layouts::error>

@@ -6,7 +6,8 @@ use Livewire\Attributes\Locked;
 use Livewire\Attributes\Title;
 use Livewire\Component;
 
-new #[Title('Contract person')] class extends Component {
+new #[Title('Contract person')] class extends Component
+{
     #[Locked]
     public ClientContactPerson $clientContactPerson;
 
@@ -31,7 +32,11 @@ new #[Title('Contract person')] class extends Component {
 
         <div class="flex flex-wrap items-center gap-2">
             @can('update', $clientContactPerson)
-                <flux:button :href="route('client-contact-persons.edit', $clientContactPerson)" variant="primary" icon="pencil-square">
+                <flux:button
+                    :href="route('client-contact-persons.edit', $clientContactPerson)"
+                    variant="primary"
+                    icon="pencil-square"
+                >
                     {{ __('Edit') }}
                 </flux:button>
             @endcan

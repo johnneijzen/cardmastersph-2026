@@ -8,7 +8,8 @@ use Livewire\Attributes\Locked;
 use Livewire\Attributes\Title;
 use Livewire\Component;
 
-new #[Title('Reset password')] class extends Component {
+new #[Title('Reset password')] class extends Component
+{
     #[Locked]
     public User $user;
 
@@ -122,16 +123,15 @@ new #[Title('Reset password')] class extends Component {
                 />
             @endunless
 
-            <flux:checkbox wire:model="mustChangePassword" :label="__('Require a password change at the next sign in')" />
+            <flux:checkbox
+                wire:model="mustChangePassword"
+                :label="__('Require a password change at the next sign in')"
+            />
 
             <div class="flex justify-end gap-3">
-                <flux:button :href="route('admin.users.index')" variant="ghost">
-                    {{ __('Cancel') }}
-                </flux:button>
+                <flux:button :href="route('admin.users.index')" variant="ghost"> {{ __('Cancel') }} </flux:button>
 
-                <flux:button variant="primary" wire:click="resetPassword">
-                    {{ __('Reset password') }}
-                </flux:button>
+                <flux:button variant="primary" wire:click="resetPassword"> {{ __('Reset password') }} </flux:button>
             </div>
         </div>
     @endif

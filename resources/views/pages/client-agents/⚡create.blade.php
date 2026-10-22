@@ -7,7 +7,8 @@ use Illuminate\Support\Facades\Gate;
 use Livewire\Attributes\Title;
 use Livewire\Component;
 
-new #[Title('Add agent')] class extends Component {
+new #[Title('Add agent')] class extends Component
+{
     public string $name = '';
 
     /**
@@ -48,13 +49,9 @@ new #[Title('Add agent')] class extends Component {
         </flux:card>
 
         <div class="flex justify-end gap-3">
-            <flux:button :href="route('client-agents.index')" variant="ghost">
-                {{ __('Cancel') }}
-            </flux:button>
+            <flux:button :href="route('client-agents.index')" variant="ghost"> {{ __('Cancel') }} </flux:button>
 
-            <flux:button variant="primary" type="submit">
-                {{ __('Save') }}
-            </flux:button>
+            <flux:button variant="primary" type="submit"> {{ __('Save') }} </flux:button>
         </div>
     </form>
 </div>

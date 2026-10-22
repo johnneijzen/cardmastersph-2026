@@ -12,7 +12,8 @@ use Livewire\Attributes\Computed;
 use Livewire\Attributes\Title;
 use Livewire\Component;
 
-new #[Title('Add client')] class extends Component {
+new #[Title('Add client')] class extends Component
+{
     public string $name = '';
 
     public string $client_number = '';
@@ -113,7 +114,11 @@ new #[Title('Add client')] class extends Component {
 
             <div class="grid gap-4 sm:grid-cols-2">
                 <flux:input wire:model="name" :label="__('Name')" :error="$errors->first('name')" />
-                <flux:input wire:model="client_number" :label="__('Phone number')" :error="$errors->first('client_number')" />
+                <flux:input
+                    wire:model="client_number"
+                    :label="__('Phone number')"
+                    :error="$errors->first('client_number')"
+                />
 
                 <flux:select wire:model="agent_id" :label="__('Agent')" :error="$errors->first('agent_id')">
                     <option value="">{{ __('No agent') }}</option>
@@ -128,9 +133,17 @@ new #[Title('Add client')] class extends Component {
             <flux:heading size="lg">{{ __('Address') }}</flux:heading>
 
             <div class="grid gap-4 sm:grid-cols-2">
-                <flux:input wire:model="line_address" :label="__('Line address')" :error="$errors->first('line_address')" />
+                <flux:input
+                    wire:model="line_address"
+                    :label="__('Line address')"
+                    :error="$errors->first('line_address')"
+                />
 
-                <flux:select wire:model.live="province_id" :label="__('Province')" :error="$errors->first('province_id')">
+                <flux:select
+                    wire:model.live="province_id"
+                    :label="__('Province')"
+                    :error="$errors->first('province_id')"
+                >
                     <option value="">{{ __('Choose a province') }}</option>
                     @foreach ($this->provinces as $province)
                         <option value="{{ $province->id }}">{{ $province->name }}</option>
@@ -147,13 +160,9 @@ new #[Title('Add client')] class extends Component {
         </flux:card>
 
         <div class="flex justify-end gap-3">
-            <flux:button :href="route('clients.index')" variant="ghost">
-                {{ __('Cancel') }}
-            </flux:button>
+            <flux:button :href="route('clients.index')" variant="ghost"> {{ __('Cancel') }} </flux:button>
 
-            <flux:button variant="primary" type="submit">
-                {{ __('Save') }}
-            </flux:button>
+            <flux:button variant="primary" type="submit"> {{ __('Save') }} </flux:button>
         </div>
     </form>
 </div>

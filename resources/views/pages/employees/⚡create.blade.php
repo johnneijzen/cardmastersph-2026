@@ -15,7 +15,8 @@ use Livewire\Attributes\Locked;
 use Livewire\Attributes\Title;
 use Livewire\Component;
 
-new #[Title('Add employee')] class extends Component {
+new #[Title('Add employee')] class extends Component
+{
     public string $first_name = '';
 
     public string $middle_name = '';
@@ -173,13 +174,9 @@ new #[Title('Add employee')] class extends Component {
         </flux:callout>
 
         <div class="flex gap-3">
-            <flux:button :href="route('employees.index')" variant="ghost">
-                {{ __('Back to the list') }}
-            </flux:button>
+            <flux:button :href="route('employees.index')" variant="ghost"> {{ __('Back to the list') }} </flux:button>
 
-            <flux:button variant="primary" wire:click="finish">
-                {{ __('Continue') }}
-            </flux:button>
+            <flux:button variant="primary" wire:click="finish"> {{ __('Continue') }} </flux:button>
         </div>
     @else
         <form wire:submit="save" class="max-w-3xl space-y-8">
@@ -187,12 +184,29 @@ new #[Title('Add employee')] class extends Component {
                 <flux:heading size="lg">{{ __('Personal information') }}</flux:heading>
 
                 <div class="grid gap-4 sm:grid-cols-2">
-                    <flux:input wire:model="first_name" :label="__('First name')" :error="$errors->first('first_name')" />
-                    <flux:input wire:model="middle_name" :label="__('Middle name')" :error="$errors->first('middle_name')" />
+                    <flux:input
+                        wire:model="first_name"
+                        :label="__('First name')"
+                        :error="$errors->first('first_name')"
+                    />
+                    <flux:input
+                        wire:model="middle_name"
+                        :label="__('Middle name')"
+                        :error="$errors->first('middle_name')"
+                    />
                     <flux:input wire:model="last_name" :label="__('Last name')" :error="$errors->first('last_name')" />
                     <flux:input wire:model="position" :label="__('Position')" :error="$errors->first('position')" />
-                    <flux:input wire:model="birthday" type="date" :label="__('Birthday')" :error="$errors->first('birthday')" />
-                    <flux:input wire:model="contact_number" :label="__('Contact number')" :error="$errors->first('contact_number')" />
+                    <flux:input
+                        wire:model="birthday"
+                        type="date"
+                        :label="__('Birthday')"
+                        :error="$errors->first('birthday')"
+                    />
+                    <flux:input
+                        wire:model="contact_number"
+                        :label="__('Contact number')"
+                        :error="$errors->first('contact_number')"
+                    />
                     <flux:input
                         wire:model="emergency_contact_person_name"
                         :label="__('Emergency contact person')"
@@ -210,9 +224,17 @@ new #[Title('Add employee')] class extends Component {
                 <flux:heading size="lg">{{ __('Address') }}</flux:heading>
 
                 <div class="grid gap-4 sm:grid-cols-2">
-                    <flux:input wire:model="line_address" :label="__('Line address')" :error="$errors->first('line_address')" />
+                    <flux:input
+                        wire:model="line_address"
+                        :label="__('Line address')"
+                        :error="$errors->first('line_address')"
+                    />
 
-                    <flux:select wire:model.live="province_id" :label="__('Province')" :error="$errors->first('province_id')">
+                    <flux:select
+                        wire:model.live="province_id"
+                        :label="__('Province')"
+                        :error="$errors->first('province_id')"
+                    >
                         <option value="">{{ __('Choose a province') }}</option>
                         @foreach ($this->provinces as $province)
                             <option value="{{ $province->id }}">{{ $province->name }}</option>
@@ -237,7 +259,12 @@ new #[Title('Add employee')] class extends Component {
 
                     @if ($create_account)
                         <div class="grid gap-4 sm:grid-cols-2">
-                            <flux:input wire:model="email" type="email" :label="__('E-mail address')" :error="$errors->first('email')" />
+                            <flux:input
+                                wire:model="email"
+                                type="email"
+                                :label="__('E-mail address')"
+                                :error="$errors->first('email')"
+                            />
 
                             <flux:select wire:model="role" :label="__('Role')" :error="$errors->first('role')">
                                 @foreach ($this->roles as $value => $label)
@@ -254,13 +281,9 @@ new #[Title('Add employee')] class extends Component {
             </flux:card>
 
             <div class="flex justify-end gap-3">
-                <flux:button :href="route('employees.index')" variant="ghost">
-                    {{ __('Cancel') }}
-                </flux:button>
+                <flux:button :href="route('employees.index')" variant="ghost"> {{ __('Cancel') }} </flux:button>
 
-                <flux:button variant="primary" type="submit">
-                    {{ __('Save') }}
-                </flux:button>
+                <flux:button variant="primary" type="submit"> {{ __('Save') }} </flux:button>
             </div>
         </form>
     @endif

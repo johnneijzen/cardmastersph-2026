@@ -7,7 +7,8 @@ use Livewire\Attributes\Locked;
 use Livewire\Attributes\Title;
 use Livewire\Component;
 
-new #[Title('Client agent')] class extends Component {
+new #[Title('Client agent')] class extends Component
+{
     #[Locked]
     public ClientAgent $clientAgent;
 
@@ -66,7 +67,9 @@ new #[Title('Client agent')] class extends Component {
             </div>
             <div class="flex items-center justify-between gap-4">
                 <dt class="text-zinc-600 dark:text-zinc-400">{{ __('Added on') }}</dt>
-                <dd class="font-medium">{{ $clientAgent->created_at ? date('d M Y', (int) $clientAgent->created_at) : '—' }}</dd>
+                <dd class="font-medium">
+                    {{ $clientAgent->created_at ? date('d M Y', (int) $clientAgent->created_at) : '—' }}
+                </dd>
             </div>
         </dl>
     </flux:card>

@@ -6,7 +6,8 @@ use Livewire\Attributes\Computed;
 use Livewire\Attributes\Title;
 use Livewire\Component;
 
-new #[Title('Dashboard')] class extends Component {
+new #[Title('Dashboard')] class extends Component
+{
     /**
      * The number of days the upcoming activities are listed for.
      */
@@ -93,9 +94,7 @@ new #[Title('Dashboard')] class extends Component {
                 <div>
                     <flux:text size="sm">{{ __('Archived job orders') }}</flux:text>
                     <flux:heading size="xl">{{ number_format($this->statistics['jobOrders']['archived']) }}</flux:heading>
-                    <flux:text size="xs" class="text-zinc-500">
-                        {{ __('Excluded from the active lists') }}
-                    </flux:text>
+                    <flux:text size="xs" class="text-zinc-500"> {{ __('Excluded from the active lists') }} </flux:text>
                 </div>
                 <flux:icon.archive-box class="size-8 text-zinc-400" />
             </flux:card>
@@ -153,11 +152,15 @@ new #[Title('Dashboard')] class extends Component {
                 <dl class="grid gap-3">
                     <div class="flex items-center justify-between">
                         <dt class="text-sm text-zinc-600 dark:text-zinc-400">{{ __('Due within seven days') }}</dt>
-                        <dd class="text-sm font-semibold">{{ number_format($this->statistics['tasks']['dueSoon']) }}</dd>
+                        <dd class="text-sm font-semibold">
+                            {{ number_format($this->statistics['tasks']['dueSoon']) }}
+                        </dd>
                     </div>
                     <div class="flex items-center justify-between">
                         <dt class="text-sm text-zinc-600 dark:text-zinc-400">{{ __('Overdue') }}</dt>
-                        <dd class="text-sm font-semibold text-red-600 dark:text-red-400">{{ number_format($this->statistics['tasks']['overdue']) }}</dd>
+                        <dd class="text-sm font-semibold text-red-600 dark:text-red-400">
+                            {{ number_format($this->statistics['tasks']['overdue']) }}
+                        </dd>
                     </div>
                     <div class="flex items-center justify-between">
                         <dt class="text-sm text-zinc-600 dark:text-zinc-400">{{ __('Not fully paid') }}</dt>
@@ -182,7 +185,7 @@ new #[Title('Dashboard')] class extends Component {
 
             <div class="overflow-x-auto">
                 <table class="w-full text-left text-sm">
-                    <thead class="text-xs uppercase tracking-wide text-zinc-500">
+                    <thead class="text-xs tracking-wide text-zinc-500 uppercase">
                         <tr>
                             <th class="px-4 py-3">{{ __('Due date') }}</th>
                             <th class="px-4 py-3">{{ __('Job order') }}</th>
@@ -201,7 +204,9 @@ new #[Title('Dashboard')] class extends Component {
                                 </td>
                                 <td class="px-4 py-3 font-medium">#{{ $order->id }}</td>
                                 <td class="px-4 py-3">{{ $order->client?->name ?? __('—') }}</td>
-                                <td class="px-4 py-3">{{ $order->jobOrder?->employee?->getFullNameAttribute() ?? __('—') }}</td>
+                                <td class="px-4 py-3">
+                                    {{ $order->jobOrder?->employee?->getFullNameAttribute() ?? __('—') }}
+                                </td>
                                 <td class="px-4 py-3">{{ $order->status ?? __('—') }}</td>
                             </tr>
                         @empty
@@ -225,19 +230,27 @@ new #[Title('Dashboard')] class extends Component {
                 <dl class="grid gap-3">
                     <div class="flex items-center justify-between">
                         <dt class="text-sm text-zinc-600 dark:text-zinc-400">{{ __('Total') }}</dt>
-                        <dd class="text-sm font-semibold">{{ number_format($this->statistics['employees']['total']) }}</dd>
+                        <dd class="text-sm font-semibold">
+                            {{ number_format($this->statistics['employees']['total']) }}
+                        </dd>
                     </div>
                     <div class="flex items-center justify-between">
                         <dt class="text-sm text-zinc-600 dark:text-zinc-400">{{ __('Artists') }}</dt>
-                        <dd class="text-sm font-semibold">{{ number_format($this->statistics['employees']['artists']) }}</dd>
+                        <dd class="text-sm font-semibold">
+                            {{ number_format($this->statistics['employees']['artists']) }}
+                        </dd>
                     </div>
                     <div class="flex items-center justify-between">
                         <dt class="text-sm text-zinc-600 dark:text-zinc-400">{{ __('With an account') }}</dt>
-                        <dd class="text-sm font-semibold">{{ number_format($this->statistics['employees']['withAccount']) }}</dd>
+                        <dd class="text-sm font-semibold">
+                            {{ number_format($this->statistics['employees']['withAccount']) }}
+                        </dd>
                     </div>
                     <div class="flex items-center justify-between">
                         <dt class="text-sm text-zinc-600 dark:text-zinc-400">{{ __('Assigned to job orders') }}</dt>
-                        <dd class="text-sm font-semibold">{{ number_format($this->statistics['employees']['assigned']) }}</dd>
+                        <dd class="text-sm font-semibold">
+                            {{ number_format($this->statistics['employees']['assigned']) }}
+                        </dd>
                     </div>
                 </dl>
             </flux:card>
@@ -250,11 +263,15 @@ new #[Title('Dashboard')] class extends Component {
                 <dl class="grid gap-3">
                     <div class="flex items-center justify-between">
                         <dt class="text-sm text-zinc-600 dark:text-zinc-400">{{ __('Items') }}</dt>
-                        <dd class="text-sm font-semibold">{{ number_format($this->statistics['inventory']['total']) }}</dd>
+                        <dd class="text-sm font-semibold">
+                            {{ number_format($this->statistics['inventory']['total']) }}
+                        </dd>
                     </div>
                     <div class="flex items-center justify-between">
                         <dt class="text-sm text-zinc-600 dark:text-zinc-400">{{ __('Out of stock') }}</dt>
-                        <dd class="text-sm font-semibold text-amber-600 dark:text-amber-400">{{ number_format($this->statistics['inventory']['outOfStock']) }}</dd>
+                        <dd class="text-sm font-semibold text-amber-600 dark:text-amber-400">
+                            {{ number_format($this->statistics['inventory']['outOfStock']) }}
+                        </dd>
                     </div>
                 </dl>
             </flux:card>
@@ -267,16 +284,22 @@ new #[Title('Dashboard')] class extends Component {
                 <dl class="grid gap-3">
                     <div class="flex items-center justify-between">
                         <dt class="text-sm text-zinc-600 dark:text-zinc-400">{{ __('Received this month') }}</dt>
-                        <dd class="text-sm font-semibold">{{ number_format($this->statistics['cashReceipts']['receivedThisMonth'], 2) }}</dd>
+                        <dd class="text-sm font-semibold">
+                            {{ number_format($this->statistics['cashReceipts']['receivedThisMonth'], 2) }}
+                        </dd>
                     </div>
                     <div class="flex items-center justify-between">
                         <dt class="text-sm text-zinc-600 dark:text-zinc-400">{{ __('Receipts this month') }}</dt>
-                        <dd class="text-sm font-semibold">{{ number_format($this->statistics['cashReceipts']['receiptsThisMonth']) }}</dd>
+                        <dd class="text-sm font-semibold">
+                            {{ number_format($this->statistics['cashReceipts']['receiptsThisMonth']) }}
+                        </dd>
                     </div>
                     @isset($this->statistics['cashReceipts']['outstanding'])
                         <div class="flex items-center justify-between">
                             <dt class="text-sm text-zinc-600 dark:text-zinc-400">{{ __('Outstanding balance') }}</dt>
-                            <dd class="text-sm font-semibold">{{ number_format($this->statistics['cashReceipts']['outstanding'], 2) }}</dd>
+                            <dd class="text-sm font-semibold">
+                                {{ number_format($this->statistics['cashReceipts']['outstanding'], 2) }}
+                            </dd>
                         </div>
                     @endisset
                 </dl>

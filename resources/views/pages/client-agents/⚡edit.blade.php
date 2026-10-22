@@ -8,7 +8,8 @@ use Livewire\Attributes\Locked;
 use Livewire\Attributes\Title;
 use Livewire\Component;
 
-new #[Title('Edit agent')] class extends Component {
+new #[Title('Edit agent')] class extends Component
+{
     #[Locked]
     public ClientAgent $clientAgent;
 
@@ -59,9 +60,7 @@ new #[Title('Edit agent')] class extends Component {
                 {{ __('Cancel') }}
             </flux:button>
 
-            <flux:button variant="primary" type="submit">
-                {{ __('Save') }}
-            </flux:button>
+            <flux:button variant="primary" type="submit"> {{ __('Save') }} </flux:button>
         </div>
     </form>
 </div>

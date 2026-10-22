@@ -11,7 +11,8 @@ use Livewire\Attributes\Locked;
 use Livewire\Attributes\Title;
 use Livewire\Component;
 
-new #[Title('Edit contract person')] class extends Component {
+new #[Title('Edit contract person')] class extends Component
+{
     #[Locked]
     public ClientContactPerson $clientContactPerson;
 
@@ -78,9 +79,22 @@ new #[Title('Edit contract person')] class extends Component {
             <flux:heading size="lg">{{ __('Contact information') }}</flux:heading>
 
             <div class="grid gap-4 sm:grid-cols-2">
-                <flux:input wire:model="contact_person" :label="__('Contact person')" :error="$errors->first('contact_person')" />
-                <flux:input wire:model="contact_number" :label="__('Contact number')" :error="$errors->first('contact_number')" />
-                <flux:input wire:model="contact_email" type="email" :label="__('E-mail address')" :error="$errors->first('contact_email')" />
+                <flux:input
+                    wire:model="contact_person"
+                    :label="__('Contact person')"
+                    :error="$errors->first('contact_person')"
+                />
+                <flux:input
+                    wire:model="contact_number"
+                    :label="__('Contact number')"
+                    :error="$errors->first('contact_number')"
+                />
+                <flux:input
+                    wire:model="contact_email"
+                    type="email"
+                    :label="__('E-mail address')"
+                    :error="$errors->first('contact_email')"
+                />
 
                 <flux:select wire:model="client_id" :label="__('Client')" :error="$errors->first('client_id')">
                     <option value="">{{ __('Choose a client') }}</option>
@@ -96,9 +110,7 @@ new #[Title('Edit contract person')] class extends Component {
                 {{ __('Cancel') }}
             </flux:button>
 
-            <flux:button variant="primary" type="submit">
-                {{ __('Save') }}
-            </flux:button>
+            <flux:button variant="primary" type="submit"> {{ __('Save') }} </flux:button>
         </div>
     </form>
 </div>
