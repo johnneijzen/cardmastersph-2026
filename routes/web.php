@@ -14,6 +14,7 @@ Route::middleware(['auth', 'password.changed'])->group(function () {
 
     Route::livewire('inventory', 'inventory.inventory-table')->name('inventory.index');
     Route::livewire('inventory/create', 'pages::inventory.create')->name('inventory.create');
+    Route::livewire('inventory/import', 'pages::inventory.import')->name('inventory.import');
     Route::livewire('inventory/{inventory}', 'pages::inventory.show')->name('inventory.show');
     Route::livewire('inventory/{inventory}/edit', 'pages::inventory.edit')->name('inventory.edit');
 
@@ -24,6 +25,15 @@ Route::middleware(['auth', 'password.changed'])->group(function () {
     Route::livewire('subcategories', 'subcategories.subcategories-table')->name('subcategories.index');
     Route::livewire('subcategories/create', 'pages::subcategories.create')->name('subcategories.create');
     Route::livewire('subcategories/{subcategory}/edit', 'pages::subcategories.edit')->name('subcategories.edit');
+
+    Route::livewire('withdrawal-slips', 'withdrawal-slips.withdrawal-slips-table')->name('withdrawal-slips.index');
+    Route::livewire('withdrawal-slips/create', 'pages::withdrawal-slips.create')->name('withdrawal-slips.create');
+    Route::livewire('withdrawal-slips/{withdrawalSlip}/print', 'pages::withdrawal-slips.print')
+        ->name('withdrawal-slips.print')
+        ->withTrashed();
+    Route::livewire('withdrawal-slips/{withdrawalSlip}', 'pages::withdrawal-slips.show')
+        ->name('withdrawal-slips.show')
+        ->withTrashed();
 
     Route::livewire('clients', 'clients.clients-table')->name('clients.index');
     Route::livewire('clients/create', 'pages::clients.create')->name('clients.create');

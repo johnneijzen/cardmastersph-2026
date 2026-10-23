@@ -39,6 +39,14 @@ class InventoryPolicy
     }
 
     /**
+     * Determine whether the user may import inventory records.
+     */
+    public function import(User $user): bool
+    {
+        return $user->can(Permission::ImportInventory);
+    }
+
+    /**
      * Determine whether the user may change the given item.
      *
      * The same ability covers the stock adjustments, because a quantity may

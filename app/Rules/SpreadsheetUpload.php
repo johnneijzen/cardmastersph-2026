@@ -59,26 +59,27 @@ class SpreadsheetUpload implements ValidationRule
     /**
      * The mime types that may be uploaded for the accepted extensions.
      *
+     * A file may be uploaded in any of the extensions the rule accepts, so the
+     * mime types of every accepted extension are allowed together.
+     *
      * @return array<int, string>
      */
     protected function allowedMimeTypes(): array
     {
-        return match (true) {
-            in_array('csv', $this->extensions, true) => [
-                'text/csv',
-                'text/plain',
-                'application/csv',
-                'application/vnd.ms-excel',
-            ],
-            in_array('xlsx', $this->extensions, true) => [
-                'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-                'application/zip',
-            ],
-            in_array('xls', $this->extensions, true) => [
-                'application/vnd.ms-excel',
-                'application/octet-stream',
-            ],
-            default => [],
-        };
+        $mimeTypes = [];
+
+        if (in_array('csv', $this->extensions, true)) {
+            $mimeTypes = [...$mimeTypes, 'text/csv', 'text/plain', 'application/csv', 'application/vnd.ms-excel'];
+        }
+
+        if (in_array('xlsx', $this->extensions, true)) {
+            $mimeTypes = [...$mimeTypes, 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'application/zip'];
+        }
+
+        if (in_array('xls', $this->extensions, true)) {
+            $mimeTypes = [...$mimeTypes, 'application/vnd.ms-excel', 'application/octet-stream'];
+        }
+
+        return array_values(array_unique($mimeTypes));
     }
 }

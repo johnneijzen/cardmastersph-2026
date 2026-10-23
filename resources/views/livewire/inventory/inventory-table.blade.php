@@ -10,6 +10,12 @@
                 {{ __('Add item') }}
             </flux:button>
         @endcan
+
+        @can('import', App\Models\Inventory::class)
+            <flux:button :href="route('inventory.import')" variant="ghost" icon="arrow-up-tray">
+                {{ __('Import') }}
+            </flux:button>
+        @endcan
     </header>
 
     @include('livewire-tables::datatable')

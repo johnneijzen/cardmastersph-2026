@@ -125,6 +125,57 @@ class InventoryService
     }
 
     /**
+     * Take stock out of an item for a withdrawal.
+     *
+     * The caller is responsible for locking the item and wrapping the change
+     * and the withdrawal slip in one transaction, so the quantity and the slip
+     * are written together or not at all.
+     */
+    public function withdraw(
+        Inventory $inventory,
+        int $quantity,
+        string $notes,
+        ?int $userId = null,
+        string $errorKey = 'quantity',
+    ): InventoryMovement {
+        if ($quantity < 1) {
+            throw ValidationException::withMessages([
+                $errorKey => __('The withdrawn quantity has to be at least one.'),
+            ]);
+        }
+
+        return $this->changeQuantity(
+            $inventory,
+            -$quantity,
+            InventoryMovementType::Withdrawal,
+            $notes,
+            $userId,
+            $errorKey,
+        );
+    }
+
+    /**
+     * Put withdrawn stock back on an item.
+     *
+     * The caller is responsible for locking the item and wrapping the return
+     * and the reversal of the withdrawal slip in one transaction.
+     */
+    public function returnStock(
+        Inventory $inventory,
+        int $quantity,
+        string $notes,
+        ?int $userId = null,
+    ): InventoryMovement {
+        return $this->changeQuantity(
+            $inventory,
+            $quantity,
+            InventoryMovementType::Return,
+            $notes,
+            $userId,
+        );
+    }
+
+    /**
      * Remove an item from the active list.
      *
      * An item that a withdrawal slip still names cannot be removed, because
@@ -140,6 +191,46 @@ class InventoryService
         }
 
         $inventory->delete();
+    }
+
+    /**
+     * Change the quantity of a locked item and record the movement.
+     *
+     * A quantity may never drop below zero. The caller is responsible for
+     * locking the item and for the surrounding transaction.
+     */
+    protected function changeQuantity(
+        Inventory $inventory,
+        int $change,
+        InventoryMovementType $type,
+        ?string $notes,
+        ?int $userId,
+        string $errorKey = 'quantity',
+    ): InventoryMovement {
+        $quantityBefore = $inventory->quantity();
+        $quantityAfter = $quantityBefore + $change;
+
+        if ($quantityAfter < 0) {
+            throw ValidationException::withMessages([
+                $errorKey => __('Only :available of :item are on hand.', [
+                    'available' => $quantityBefore,
+                    'item' => $inventory->item_name,
+                ]),
+            ]);
+        }
+
+        $inventory->forceFill([
+            'current_quantity' => (string) $quantityAfter,
+        ])->save();
+
+        return $this->recordMovement(
+            $inventory,
+            $type,
+            $quantityBefore,
+            $quantityAfter,
+            $notes,
+            $userId,
+        );
     }
 
     /**

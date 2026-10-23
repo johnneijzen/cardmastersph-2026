@@ -5,9 +5,9 @@ namespace App\Imports\Concerns;
 /**
  * Collects the outcome of a spreadsheet import.
  *
- * Every import reports how many rows were created, updated or skipped and
- * keeps the row level errors so the user can be told exactly which rows
- * failed and why.
+ * Every import reports how many rows were created, updated, left untouched or
+ * rejected and keeps the row level errors, so the user can be told exactly
+ * which rows failed and why.
  */
 trait CollectsImportResults
 {
@@ -22,9 +22,14 @@ trait CollectsImportResults
     protected int $updatedCount = 0;
 
     /**
-     * The number of rows that were left untouched.
+     * The number of rows that were valid but changed nothing.
      */
     protected int $skippedCount = 0;
+
+    /**
+     * The number of rows that were rejected.
+     */
+    protected int $failedCount = 0;
 
     /**
      * The row level errors, keyed by the spreadsheet row number.
@@ -32,6 +37,13 @@ trait CollectsImportResults
      * @var array<int, array<int, string>>
      */
     protected array $rowErrors = [];
+
+    /**
+     * The outcome of every row, in the order of the spreadsheet.
+     *
+     * @var list<array{row: int, status: string, label: string|null, messages: list<string>}>
+     */
+    protected array $previewRows = [];
 
     /**
      * Record that a row was created.
@@ -50,11 +62,19 @@ trait CollectsImportResults
     }
 
     /**
-     * Record that a row was skipped.
+     * Record that a row was left untouched.
      */
     protected function countSkipped(): void
     {
         $this->skippedCount++;
+    }
+
+    /**
+     * Record that a row was rejected.
+     */
+    protected function countFailed(): void
+    {
+        $this->failedCount++;
     }
 
     /**
@@ -76,6 +96,16 @@ trait CollectsImportResults
     }
 
     /**
+     * The outcome of every row.
+     *
+     * @return list<array{row: int, status: string, label: string|null, messages: list<string>}>
+     */
+    public function rowPreviews(): array
+    {
+        return $this->previewRows;
+    }
+
+    /**
      * The summary of the import.
      *
      * @return array{imported: int, updated: int, skipped: int, failed: int, errors: array<int, array<int, string>>}
@@ -86,7 +116,7 @@ trait CollectsImportResults
             'imported' => $this->importedCount,
             'updated' => $this->updatedCount,
             'skipped' => $this->skippedCount,
-            'failed' => count($this->rowErrors),
+            'failed' => $this->failedCount,
             'errors' => $this->rowErrors,
         ];
     }

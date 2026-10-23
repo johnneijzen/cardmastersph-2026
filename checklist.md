@@ -118,26 +118,26 @@
 
 ### 5.3 Withdraw Slip
 
-- [ ] Create inventory withdrawal slip
-- [ ] Assign withdrawal slip number
-- [ ] Add withdrawn items and quantities
-- [ ] Record withdrawal date and responsible employee
-- [ ] Validate available stock before withdrawal
-- [ ] Update inventory quantities safely
-- [ ] View and print withdrawal slips
-- [ ] Maintain withdrawal history
-- [ ] Prevent duplicate or unauthorized stock deductions
+- [x] Create inventory withdrawal slip — `pages::withdrawal-slips.create`, `App\Services\WithdrawalSlipService`
+- [x] Assign withdrawal slip number — `App\Services\NumberSequenceService`, `withdrawal_slips.slip_number` (`WS-YYYY-######`)
+- [x] Add withdrawn items and quantities — `inventory_withdrawal_slips` with `qty` and `particulars`
+- [x] Record withdrawal date and responsible employee — `withdrawal_slips.date` and `employee_id`
+- [x] Validate available stock before withdrawal — `App\Rules\WithdrawalSlipRules`, the service locks the items and checks the quantity again
+- [x] Update inventory quantities safely — one transaction around the slip, the locked items and the `withdrawal` stock movements
+- [x] View and print withdrawal slips — `pages::withdrawal-slips.show`, `pages::withdrawal-slips.print`
+- [x] Maintain withdrawal history — the slip is archived instead of deleted, the reversed slips stay available through the status filter and the stock movements stay readable
+- [x] Prevent duplicate or unauthorized stock deductions — an item may only be named once per slip, the items are locked, the reversal can only run once and every action is checked against `withdrawal-slips.*`
 
 ### 5.4 Inventory Import
 
-- [ ] Import inventory records from file
-- [ ] Validate file format and required columns
-- [ ] Validate categories and subcategories
-- [ ] Detect duplicate or conflicting records
-- [ ] Preview import results before processing
-- [ ] Report invalid rows and import errors
-- [ ] Provide an import summary
-- [ ] Prevent unintended inventory quantity changes
+- [x] Import inventory records from file — `App\Imports\InventoryImport`, `pages::inventory.import`
+- [x] Validate file format and required columns — `App\Rules\SpreadsheetUpload`, required headings checked before any row is read
+- [x] Validate categories and subcategories — the category has to exist and the subcategory has to belong to it; missing records are reported instead of created
+- [x] Detect duplicate or conflicting records — duplicate rows in the file and items that already exist are reported; an archived item is not recreated
+- [x] Preview import results before processing — the preview runs the import in a transaction that is rolled back, so nothing is kept
+- [x] Report invalid rows and import errors — every row keeps its status and messages, shown by spreadsheet row number
+- [x] Provide an import summary — added, updated, unchanged and rejected counts in `App\Imports\Concerns\CollectsImportResults`
+- [x] Prevent unintended inventory quantity changes — an existing item keeps its quantity; a different quantity is a conflict and has to go through a stock adjustment
 
 ## 6. Job Orders
 

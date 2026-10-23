@@ -12,6 +12,8 @@ enum InventoryMovementType: string
 {
     case Opening = 'opening';
     case Adjustment = 'adjustment';
+    case Withdrawal = 'withdrawal';
+    case Return = 'return';
 
     /**
      * @return array<int, string>
@@ -26,6 +28,8 @@ enum InventoryMovementType: string
         return match ($this) {
             self::Opening => 'Opening balance',
             self::Adjustment => 'Adjustment',
+            self::Withdrawal => 'Withdrawal',
+            self::Return => 'Stock returned',
         };
     }
 }
