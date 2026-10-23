@@ -12,6 +12,7 @@ use App\Models\Inventory;
 use App\Models\JobOrder;
 use App\Models\Order;
 use App\Models\User;
+use App\Support\Money\MoneyContext;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 
@@ -172,10 +173,15 @@ class DashboardService
             return [];
         }
 
-        $receivedThisMonth = (float) CashReceipt::whereBetween('date', [
-            now()->startOfMonth(),
-            now()->endOfMonth(),
-        ])->sum('amount');
+        $receivedThisMonth = MoneyContext::format(MoneyContext::fromStorage(
+            CashReceipt::query()
+                ->whereBetween('date', [
+                    now()->startOfMonth(),
+                    now()->endOfMonth(),
+                ])
+                ->selectRaw('CAST(COALESCE(SUM(amount), 0) AS CHAR) AS total')
+                ->value('total'),
+        ));
 
         $statistics = [
             'receivedThisMonth' => $receivedThisMonth,
@@ -186,7 +192,11 @@ class DashboardService
         ];
 
         if ($user->can(Permission::ViewAccountsReceivable)) {
-            $statistics['outstanding'] = (float) Order::sum('balance');
+            $statistics['outstanding'] = MoneyContext::format(MoneyContext::fromStorage(
+                Order::query()
+                    ->selectRaw('CAST(COALESCE(SUM(balance), 0) AS CHAR) AS total')
+                    ->value('total'),
+            ));
             $statistics['byPaymentStatus'] = Order::query()
                 ->selectRaw('payment_status, count(*) as aggregate')
                 ->groupBy('payment_status')

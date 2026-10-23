@@ -6,11 +6,13 @@ use App\Concerns\LogsActivity;
 use Database\Factories\ProductSubclassFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * @property string $name
+ * @property int|null $product_class_id
  * @property int $created_at
  * @property int $updated_at
  */
@@ -25,6 +27,18 @@ class ProductSubclass extends Model
     protected function activityLogName(): string
     {
         return 'product-subclass';
+    }
+
+    /**
+     * The human readable description recorded for an event.
+     */
+    protected function activityLogDescription(string $eventName): string
+    {
+        return match ($eventName) {
+            'deleted' => 'Product Subclass Archived',
+            'restored' => 'Product Subclass Restored',
+            default => str(class_basename($this).' '.$eventName)->headline(),
+        };
     }
 
     /**
@@ -47,7 +61,7 @@ class ProductSubclass extends Model
      * @var list<string>
      */
     protected $fillable = [
-        'name', 'created_at', 'updated_at',
+        'name', 'product_class_id', 'created_at', 'updated_at',
     ];
 
     /**
@@ -65,7 +79,7 @@ class ProductSubclass extends Model
      * @var array<string, string>
      */
     protected $casts = [
-        'name' => 'string', 'created_at' => 'timestamp', 'updated_at' => 'timestamp',
+        'name' => 'string', 'product_class_id' => 'integer', 'created_at' => 'timestamp', 'updated_at' => 'timestamp',
     ];
 
     /**
@@ -83,10 +97,23 @@ class ProductSubclass extends Model
 
     // Relations ...
     /**
+     * The class the subclass belongs to.
+     *
+     * A class is never hard deleted, so an archived class is still shown as
+     * the classification of the subclasses and the job orders that use it.
+     *
+     * @return BelongsTo<ProductClass, $this>
+     */
+    public function productClass(): BelongsTo
+    {
+        return $this->belongsTo(ProductClass::class, 'product_class_id')->withTrashed();
+    }
+
+    /**
      * @return HasMany<Product, $this>
      */
     public function products(): HasMany
     {
-        return $this->hasMany(Product::class);
+        return $this->hasMany(Product::class, 'subclass_id');
     }
 }

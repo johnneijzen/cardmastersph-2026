@@ -26,6 +26,20 @@ Route::middleware(['auth', 'password.changed'])->group(function () {
     Route::livewire('subcategories/create', 'pages::subcategories.create')->name('subcategories.create');
     Route::livewire('subcategories/{subcategory}/edit', 'pages::subcategories.edit')->name('subcategories.edit');
 
+    Route::livewire('product-classes', 'product-classes.product-classes-table')->name('product-classes.index');
+    Route::livewire('product-classes/create', 'pages::product-classes.create')->name('product-classes.create');
+    Route::livewire('product-classes/{productClass}', 'pages::product-classes.show')
+        ->name('product-classes.show')
+        ->withTrashed();
+    Route::livewire('product-classes/{productClass}/edit', 'pages::product-classes.edit')->name('product-classes.edit');
+
+    Route::livewire('product-subclasses', 'product-subclasses.product-subclasses-table')->name('product-subclasses.index');
+    Route::livewire('product-subclasses/create', 'pages::product-subclasses.create')->name('product-subclasses.create');
+    Route::livewire('product-subclasses/{productSubclass}', 'pages::product-subclasses.show')
+        ->name('product-subclasses.show')
+        ->withTrashed();
+    Route::livewire('product-subclasses/{productSubclass}/edit', 'pages::product-subclasses.edit')->name('product-subclasses.edit');
+
     Route::livewire('withdrawal-slips', 'withdrawal-slips.withdrawal-slips-table')->name('withdrawal-slips.index');
     Route::livewire('withdrawal-slips/create', 'pages::withdrawal-slips.create')->name('withdrawal-slips.create');
     Route::livewire('withdrawal-slips/{withdrawalSlip}/print', 'pages::withdrawal-slips.print')
@@ -34,6 +48,19 @@ Route::middleware(['auth', 'password.changed'])->group(function () {
     Route::livewire('withdrawal-slips/{withdrawalSlip}', 'pages::withdrawal-slips.show')
         ->name('withdrawal-slips.show')
         ->withTrashed();
+
+    Route::livewire('job-orders', 'job-orders.job-orders-table')->name('job-orders.index');
+    Route::livewire('job-orders/create', 'pages::job-orders.create')->name('job-orders.create');
+    Route::livewire('job-orders/{jobOrder}', 'pages::job-orders.show')
+        ->name('job-orders.show')
+        ->withTrashed();
+    Route::livewire('job-orders/{jobOrder}/print', 'pages::job-orders.print')
+        ->name('job-orders.print')
+        ->withTrashed();
+    Route::livewire('job-orders/{jobOrder}/routing-slip', 'pages::job-orders.routing-slip')
+        ->name('job-orders.routing-slip')
+        ->withTrashed();
+    Route::livewire('job-orders/{jobOrder}/edit', 'pages::job-orders.edit')->name('job-orders.edit');
 
     Route::livewire('clients', 'clients.clients-table')->name('clients.index');
     Route::livewire('clients/create', 'pages::clients.create')->name('clients.create');

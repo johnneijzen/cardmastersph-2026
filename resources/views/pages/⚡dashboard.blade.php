@@ -117,7 +117,7 @@ new #[Title('Dashboard')] class extends Component
             <flux:card class="flex items-center justify-between">
                 <div>
                     <flux:text size="sm">{{ __('Outstanding balance') }}</flux:text>
-                    <flux:heading size="xl">{{ number_format($this->statistics['cashReceipts']['outstanding'], 2) }}</flux:heading>
+                    <flux:heading size="xl">{{ $this->statistics['cashReceipts']['outstanding'] }}</flux:heading>
                     <flux:text size="xs" class="text-zinc-500">
                         {{ __(':count clients with a balance', ['count' => number_format($this->statistics['clients']['withOutstandingBalance'] ?? 0)]) }}
                     </flux:text>
@@ -285,7 +285,7 @@ new #[Title('Dashboard')] class extends Component
                     <div class="flex items-center justify-between">
                         <dt class="text-sm text-zinc-600 dark:text-zinc-400">{{ __('Received this month') }}</dt>
                         <dd class="text-sm font-semibold">
-                            {{ number_format($this->statistics['cashReceipts']['receivedThisMonth'], 2) }}
+                            {{ $this->statistics['cashReceipts']['receivedThisMonth'] }}
                         </dd>
                     </div>
                     <div class="flex items-center justify-between">
@@ -298,7 +298,7 @@ new #[Title('Dashboard')] class extends Component
                         <div class="flex items-center justify-between">
                             <dt class="text-sm text-zinc-600 dark:text-zinc-400">{{ __('Outstanding balance') }}</dt>
                             <dd class="text-sm font-semibold">
-                                {{ number_format($this->statistics['cashReceipts']['outstanding'], 2) }}
+                                {{ $this->statistics['cashReceipts']['outstanding'] }}
                             </dd>
                         </div>
                     @endisset

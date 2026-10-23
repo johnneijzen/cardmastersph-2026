@@ -19,6 +19,7 @@ class JobOrderFactory extends Factory
     public function definition(): array
     {
         return [
+            'job_order_number' => 'JO-TEST-'.fake()->unique()->numerify('######'),
             'employee_id' => Employee::factory(),
             'order_id' => Order::factory(),
             'created_by' => User::factory(),

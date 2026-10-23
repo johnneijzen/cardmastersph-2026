@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property int $updated_at
  * @property int $deleted_at
  * @property int $job_order_rating
+ * @property string|null $job_order_number
  */
 class JobOrder extends Model
 {
@@ -27,6 +28,20 @@ class JobOrder extends Model
     protected function activityLogName(): string
     {
         return 'job-order';
+    }
+
+    /**
+     * The human readable description recorded for an event.
+     *
+     * A job order that leaves the active list is archived, not deleted.
+     */
+    protected function activityLogDescription(string $eventName): string
+    {
+        return match ($eventName) {
+            'deleted' => 'Job Order Archived',
+            'restored' => 'Job Order Restored',
+            default => str(class_basename($this).' '.$eventName)->headline(),
+        };
     }
 
     /**
@@ -49,7 +64,7 @@ class JobOrder extends Model
      * @var list<string>
      */
     protected $fillable = [
-        'employee_id', 'order_id', 'created_at', 'updated_at', 'created_by', 'updated_by', 'deleted_at', 'job_order_rating',
+        'job_order_number', 'employee_id', 'order_id', 'created_at', 'updated_at', 'created_by', 'updated_by', 'deleted_at', 'job_order_rating',
     ];
 
     /**

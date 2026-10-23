@@ -141,37 +141,37 @@
 
 ## 6. Job Orders
 
-- [ ] Create job order list
-- [ ] Create job order
-- [ ] View job order details
-- [ ] Edit job order
-- [ ] Delete or cancel job orders according to business rules
-- [ ] Assign job order numbers
-- [ ] Associate job orders with clients
-- [ ] Assign agents and responsible employees
-- [ ] Manage job order statuses
-- [ ] Validate required job order information
-- [ ] Implement search, filtering, and pagination
-- [ ] Preserve job order history and relationships
+- [x] Create job order list — `rappasoft/laravel-livewire-tables`, server side search, filters and pagination
+- [x] Create job order — `pages::job-orders.create`, `App\Services\JobOrderService` writes the invoice, the line items and the job order in one transaction
+- [x] View job order details — `pages::job-orders.show`, shows the client, the contract person, the line items, the payments and every amount
+- [x] Edit job order — `pages::job-orders.edit`, line items can be added, changed and removed; the balance is derived again
+- [x] Delete or cancel job orders according to business rules — a job order is archived, never deleted; archiving is refused while a cash receipt exists so the financial history is kept
+- [x] Assign job order numbers — `job_orders.job_order_number` (`JO-YYYY-######`), `App\Services\NumberSequenceService`; legacy rows are backfilled with `JO-YYYY-L######`
+- [x] Associate job orders with clients — `orders.client_id` and a contract person of that client
+- [x] Assign agents and responsible employees — `orders.agent_id`, `job_orders.employee_id`
+- [x] Manage job order statuses — `App\Enums\JobOrderStatus`, including `Assigned: In Progress`
+- [x] Validate required job order information — `App\Rules\JobOrderRules`, `App\Rules\MonetaryAmount`, `App\Rules\SubclassBelongsToClass`; the balance and the payment status are derived server side
+- [x] Implement search, filtering, and pagination — number, client, agent, artist, status, payment status and overdue
+- [x] Preserve job order history and relationships — archiving keeps the invoice, the line items and the payments; monetary amounts are handled with `brick/money` and stored as exact decimal strings
 
 ### 6.1 View Classes
 
-- [ ] Display job order classes
-- [ ] Add class
-- [ ] Edit class
-- [ ] View class details
-- [ ] Archive class
-- [ ] Prevent unintended changes to related job orders
+- [x] Display job order classes — table with the number of subclasses and products per class
+- [x] Add class — `pages::product-classes.create`
+- [x] Edit class — `pages::product-classes.edit`
+- [x] View class details — `pages::product-classes.show`, counts of subclasses, products and job orders
+- [x] Archive class — soft delete with confirmation
+- [x] Prevent unintended changes to related job orders — archiving never detaches or rewrites the products and job orders that use the class
 
 ### 6.2 View Subclasses
 
-- [ ] Display job order subclasses
-- [ ] Add subclass
-- [ ] Edit subclass
-- [ ] View subclass details
-- [ ] Archive subclass
-- [ ] Associate subclasses with the correct classes
-- [ ] Validate class and subclass relationships
+- [x] Display job order subclasses — table with the class and the number of products per subclass
+- [x] Add subclass — `pages::product-subclasses.create`
+- [x] Edit subclass — `pages::product-subclasses.edit`, the subclass can be moved to another class
+- [x] View subclass details — `pages::product-subclasses.show`, counts of products and job orders
+- [x] Archive subclass — soft delete with confirmation
+- [x] Associate subclasses with the correct classes — `product_subclasses.product_class_id`; legacy subclasses stay unclassified until they are assigned
+- [x] Validate class and subclass relationships — `App\Rules\ProductSubclassRules` keeps a name unique inside its class and `App\Rules\SubclassBelongsToClass` checks every job order line
 
 ### 6.3 Agents List
 
@@ -211,6 +211,11 @@
 - [ ] Restore archived job orders where permitted
 - [ ] Exclude archived records from active lists by default
 - [ ] Preserve related records and historical data
+
+### 6.7 Printable Documents
+
+- [x] Print a job order invoice — `pages::job-orders.print` reproduces the legacy `job_orders/show` document with the client, line items, payments and totals
+- [x] Print a routing slip — `pages::job-orders.routing-slip` reproduces the legacy routing slip with the line items and the department sign-off table; both documents are opened from the job order list and the job order details
 
 ## 7. Cash Receipts
 

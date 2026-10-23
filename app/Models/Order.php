@@ -3,11 +3,13 @@
 namespace App\Models;
 
 use App\Concerns\LogsActivity;
+use App\Enums\JobOrderStatus;
 use Database\Factories\OrderFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Carbon;
 
@@ -74,7 +76,7 @@ class Order extends Model
      * @var array<string, string>
      */
     protected $casts = [
-        'order_date' => 'date', 'due_date' => 'date', 'status' => 'string', 'created_at' => 'timestamp', 'updated_at' => 'timestamp', 'overall_remarks' => 'string', 'payment_status' => 'string', 'purchase_order_id' => 'string', 'delivery_receipt_id' => 'string', 'billing_statement_id' => 'string', 'agent' => 'string',
+        'order_date' => 'date', 'due_date' => 'date', 'status' => 'string', 'created_at' => 'timestamp', 'updated_at' => 'timestamp', 'overall_remarks' => 'string', 'payment_status' => 'string', 'purchase_order_id' => 'string', 'delivery_receipt_id' => 'string', 'billing_statement_id' => 'string', 'agent' => 'string', 'total_amount' => 'decimal:2', 'down_payment' => 'decimal:2', 'balance' => 'decimal:2',
     ];
 
     /**
@@ -89,6 +91,26 @@ class Order extends Model
     // Scopes...
 
     // Functions ...
+    /**
+     * Whether the job order is past its due date and not completed.
+     */
+    public function isOverdue(): bool
+    {
+        if ($this->due_date === null) {
+            return false;
+        }
+
+        return $this->due_date->isPast()
+            && ! in_array($this->status, JobOrderStatus::completedValues(), true);
+    }
+
+    /**
+     * The operational status of the job order, when it is a known value.
+     */
+    public function jobOrderStatus(): ?JobOrderStatus
+    {
+        return JobOrderStatus::tryFrom((string) $this->status);
+    }
 
     // Relations ...
     /**
@@ -136,5 +158,22 @@ class Order extends Model
     public function products(): BelongsToMany
     {
         return $this->belongsToMany(Product::class, 'orders_products', 'order_id', 'product_id')->withPivot('qty');
+    }
+
+    /**
+     * The cash receipts that were recorded for the job order of the invoice.
+     *
+     * @return HasManyThrough<CashReceipt, JobOrder, $this>
+     */
+    public function cashReceipts(): HasManyThrough
+    {
+        return $this->hasManyThrough(
+            CashReceipt::class,
+            JobOrder::class,
+            'order_id',
+            'job_order_id',
+            'id',
+            'id',
+        );
     }
 }

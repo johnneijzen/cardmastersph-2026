@@ -66,7 +66,7 @@ class CashReceipt extends Model
      * @var array<string, string>
      */
     protected $casts = [
-        'date' => 'date', 'or_number' => 'string', 'created_at' => 'timestamp', 'updated_at' => 'timestamp',
+        'date' => 'date', 'or_number' => 'string', 'created_at' => 'timestamp', 'updated_at' => 'timestamp', 'amount' => 'decimal:2', 'balance' => 'decimal:2',
     ];
 
     /**

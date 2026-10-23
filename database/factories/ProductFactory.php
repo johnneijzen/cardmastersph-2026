@@ -5,6 +5,7 @@ namespace Database\Factories;
 use App\Models\Product;
 use App\Models\ProductClass;
 use App\Models\ProductSubclass;
+use App\Support\Money\MoneyContext;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
@@ -18,17 +19,19 @@ class ProductFactory extends Factory
      */
     public function definition(): array
     {
-        $unitPrice = fake()->randomFloat(2, 50, 5000);
+        $unitPriceCents = fake()->numberBetween(5000, 500000);
         $quantity = fake()->numberBetween(1, 20);
 
         return [
             'name' => Str::title(fake()->unique()->word().' '.fake()->unique()->word()),
-            'amount' => round($unitPrice * $quantity, 2),
+            'amount' => MoneyContext::toStorage(MoneyContext::ofMinor($unitPriceCents * $quantity)),
             'unit' => fake()->randomElement(['pc', 'sheet', 'roll', 'set']),
             'particulars' => fake()->sentence(),
-            'unit_price' => $unitPrice,
+            'unit_price' => MoneyContext::toStorage(MoneyContext::ofMinor($unitPriceCents)),
             'class_id' => ProductClass::factory(),
-            'subclass_id' => ProductSubclass::factory(),
+            'subclass_id' => fn (array $attributes): int => ProductSubclass::factory()
+                ->create(['product_class_id' => $attributes['class_id']])
+                ->getKey(),
         ];
     }
 }

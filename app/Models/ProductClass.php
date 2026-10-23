@@ -28,6 +28,18 @@ class ProductClass extends Model
     }
 
     /**
+     * The human readable description recorded for an event.
+     */
+    protected function activityLogDescription(string $eventName): string
+    {
+        return match ($eventName) {
+            'deleted' => 'Product Class Archived',
+            'restored' => 'Product Class Restored',
+            default => str(class_basename($this).' '.$eventName)->headline(),
+        };
+    }
+
+    /**
      * The database table used by the model.
      *
      * @var string
@@ -86,6 +98,16 @@ class ProductClass extends Model
      */
     public function products(): HasMany
     {
-        return $this->hasMany(Product::class);
+        return $this->hasMany(Product::class, 'class_id');
+    }
+
+    /**
+     * The active subclasses that belong to the class.
+     *
+     * @return HasMany<ProductSubclass, $this>
+     */
+    public function subclasses(): HasMany
+    {
+        return $this->hasMany(ProductSubclass::class, 'product_class_id');
     }
 }

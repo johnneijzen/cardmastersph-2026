@@ -67,7 +67,7 @@ class Product extends Model
      * @var array<string, string>
      */
     protected $casts = [
-        'name' => 'string', 'created_at' => 'timestamp', 'updated_at' => 'timestamp', 'particulars' => 'string', 'unit' => 'string',
+        'name' => 'string', 'created_at' => 'timestamp', 'updated_at' => 'timestamp', 'particulars' => 'string', 'unit' => 'string', 'amount' => 'decimal:2', 'unit_price' => 'decimal:2',
     ];
 
     /**

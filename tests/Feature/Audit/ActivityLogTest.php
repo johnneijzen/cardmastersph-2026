@@ -7,6 +7,8 @@ use App\Models\Employee;
 use App\Models\Inventory;
 use App\Models\InventoryMovement;
 use App\Models\JobOrder;
+use App\Models\ProductClass;
+use App\Models\ProductSubclass;
 use App\Models\Subcategory;
 use App\Models\User;
 use App\Services\InventoryService;
@@ -123,6 +125,8 @@ test('every business model records its activity under its own log name', functio
     [Subcategory::class, 'subcategory'],
     [InventoryMovement::class, 'inventory-movement'],
     [JobOrder::class, 'job-order'],
+    [ProductClass::class, 'product-class'],
+    [ProductSubclass::class, 'product-subclass'],
     [CashReceipt::class, 'cash-receipt'],
 ]);
 

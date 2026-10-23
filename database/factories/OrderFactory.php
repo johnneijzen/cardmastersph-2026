@@ -8,6 +8,7 @@ use App\Models\Client;
 use App\Models\ClientContactPerson;
 use App\Models\JobOrderAgent;
 use App\Models\Order;
+use App\Support\Money\MoneyContext;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -20,8 +21,8 @@ class OrderFactory extends Factory
      */
     public function definition(): array
     {
-        $totalAmount = fake()->randomFloat(2, 500, 50000);
-        $downPayment = 0.0;
+        $totalAmount = MoneyContext::toStorage(MoneyContext::ofMinor(fake()->numberBetween(50000, 5000000)));
+        $downPayment = MoneyContext::toStorage(MoneyContext::zero());
 
         return [
             'order_date' => now()->toDateString(),
@@ -29,7 +30,7 @@ class OrderFactory extends Factory
             'status' => JobOrderStatus::InProduction->value,
             'total_amount' => $totalAmount,
             'down_payment' => $downPayment,
-            'balance' => $totalAmount - $downPayment,
+            'balance' => $totalAmount,
             'payment_status' => PaymentStatus::Unpaid->value,
             'overall_remarks' => fake()->sentence(),
             'client_id' => Client::factory(),

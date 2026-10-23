@@ -6,6 +6,7 @@ use App\Models\CashReceipt;
 use App\Models\Client;
 use App\Models\JobOrder;
 use App\Models\PaymentOption;
+use App\Support\Money\MoneyContext;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -18,13 +19,13 @@ class CashReceiptFactory extends Factory
      */
     public function definition(): array
     {
-        $amount = fake()->randomFloat(2, 100, 5000);
+        $amount = MoneyContext::toStorage(MoneyContext::ofMinor(fake()->numberBetween(10000, 500000)));
 
         return [
             'date' => now()->toDateString(),
             'or_number' => 'OR-'.fake()->unique()->numerify('######'),
             'amount' => $amount,
-            'balance' => 0.0,
+            'balance' => MoneyContext::toStorage(MoneyContext::zero()),
             'client_id' => Client::factory(),
             'job_order_id' => JobOrder::factory(),
             'payment_option_id' => PaymentOption::factory(),
