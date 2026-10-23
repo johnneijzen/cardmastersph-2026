@@ -297,3 +297,4 @@ These do not exist in the legacy application at all:
 | hard deleted client | archived client (`clients.deleted_at`); a client is never deleted, so the job orders, the cash receipts and the withdrawal slips keep their history and their link to the client |
 | `ClientExport` with inner joined contract persons | `App\Exports\ClientExport`, one row per contract person; a client without a contract person is exported with empty contract person columns |
 | self service password reset by mail | administrator driven reset under *Administration → User Accounts*, with a forced password change at the next sign in (the deployment cannot send mail) |
+| `DECIMAL(13,2)` job order money fields | `brick/money` value objects for monetary calculations, comparisons, and currency formatting; replace float-based arithmetic with exact monetary operations and define an explicit persistence strategy for database amounts and currency codes |
